@@ -1,49 +1,62 @@
-﻿using System;
+﻿using FDL.Core.Domain;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace FDL.Loc.Domain
 {
-    public enum ERegistreStatut
+    public enum RegistreStatut
     {
         Aucun = 0,
         EnCours = 1,
         Terminé = 2,
         Radié = 3
     }
-    public enum ERegistreType
+    public enum RegistreType
     {
         Logement = 1,
         PMR = 2,
         Commerce = 3,
         Parking = 4
     }
+
+    /**
+     * Un Registre est une demande d'aide locative.
+     */
     public class Registre
     {
-        public int IdRegistre { get; private set; }
-        public int IdContrat { get; private set; }
-        public ERegistreStatut Statut { get; set; }
-        public ERegistreType Type { get; set; }
-        public DateTime DateStatut { get; private set; }
-        public DateTime DateCreation { get; private set; }
-        public int IdUserCreation { get; private set; }
-        public DateTime DateUpdate { get; private set; }
-        public int IdUserUpdate { get; private set; }
+        public int IdRegistre { get; }
+        public ReferenceDossier RefDossier { get; }
+
+        public RegistreStatut Statut { get; }
+        public RegistreType Type { get; }
+
+        public DateTime DateStatut { get; }
+        public DateTime DateCreation { get; }
+        public int IdUserCreation { get; }
+        public DateTime DateUpdate { get; }
+        public int IdUserUpdate { get; }
 
         /**
          * Constructeur par défaut
          */
-        public Registre()
+        public Registre(ReferenceDossier referenceDossier, RegistreType type, RegistreStatut statut)
         {
-            Statut = ERegistreStatut.Aucun;
-            Type = ERegistreType.Logement;
-            DateStatut = DateTime.Now;
+            // Vérifie que la référence de dossier est une demande
+            if (!referenceDossier.EstDemande)
+                throw new ArgumentException("Le registre doit être créé à partir d'une référence de demande.");
+
+            RefDossier = referenceDossier;
+            Statut = statut;
+            Type = type;
+
             DateCreation = DateTime.Now;
-            DateUpdate = DateTime.Now;
+            DateStatut = DateCreation;
+            DateUpdate = DateCreation;
+
             IdUserCreation = 0;
             IdUserUpdate = 0;
         }
 
-        
     }
 }

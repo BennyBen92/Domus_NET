@@ -14,7 +14,7 @@ namespace FDL.Loc.Tests
 
             var result = service.Evaluer(menage);
 
-            Assert.True(result.EstEligible);
+            Assert.True(result.EstEligible, "Le ménage devrait être éligible.");
         }
         [Fact]
         public void Menage_AuPlafond_EstEligible()
@@ -27,7 +27,7 @@ namespace FDL.Loc.Tests
 
             var result = service.Evaluer(menages);
 
-            Assert.True(result.EstEligible);
+            Assert.True(result.EstEligible, "Le ménage devrait être éligible.");
         }
         [Fact]
         public void Menage_SuperieurAuPlafond_NonEligible()
@@ -38,7 +38,7 @@ namespace FDL.Loc.Tests
 
             var result = service.Evaluer(menage);
 
-            Assert.False(result.EstEligible);
+            Assert.False(result.EstEligible, "Le ménage devrait être non éligible.");
         }
     }
 }
