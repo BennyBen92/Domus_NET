@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace FDL.Core.Domain
+﻿namespace FDL.Core.Domain
 {
     public enum TypeRevenu
     {

@@ -7,12 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Core\FDL.Core.csproj" />
+    <ProjectReference Include="..\FDL.Core\FDL.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Domain\" />
     <Folder Include="App\" />
+    <Folder Include="Domain\" />
   </ItemGroup>
 
 </Project>

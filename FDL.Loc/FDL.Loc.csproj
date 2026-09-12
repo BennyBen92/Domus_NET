@@ -7,13 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Domain\" />
     <Folder Include="App\" />
+    <Folder Include="Domain\" />
     <Folder Include="Infra\" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Core\FDL.Core.csproj" />
+    <ProjectReference Include="..\FDL.Core\FDL.Core.csproj" />
   </ItemGroup>
 
 </Project>

@@ -15,8 +15,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Core\FDL.Core.csproj" />
-    <ProjectReference Include="..\LOC_Module\FDL.Loc.csproj" />
+    <ProjectReference Include="..\FDL.Core\FDL.Core.csproj" />
+    <ProjectReference Include="..\FDL.Loc\FDL.Loc.csproj" />
   </ItemGroup>
 
   <ItemGroup>

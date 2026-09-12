@@ -1,5 +1,5 @@
-﻿using FDL.Core.App;
-using FDL.Core.Domain;
+﻿using FDL.Core.Domain;
+using FDL.Loc.App;
 
 namespace FDL.Loc.Tests
 {

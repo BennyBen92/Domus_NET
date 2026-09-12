@@ -1,9 +1,6 @@
 ﻿using FDL.Core.Domain;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace FDL.Core.App
+namespace FDL.Loc.App
 {
     public interface IReglesEligibiliteService
     {

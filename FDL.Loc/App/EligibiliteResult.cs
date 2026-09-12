@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace FDL.Core.App
+﻿namespace FDL.Loc.App
 {
     public record EligibiliteResult(bool EstEligible, string motif)
     {
