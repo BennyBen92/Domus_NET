@@ -7,8 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="App\" />
-    <Folder Include="Domain\" />
     <Folder Include="Infra\" />
   </ItemGroup>
 
