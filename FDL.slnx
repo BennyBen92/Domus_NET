@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/Tests/">
+    <Project Path="Loc.Tests/FDL.Loc.Tests.csproj" Id="12a79b0f-e497-4e13-97d8-b02609fa8334" />
+  </Folder>
+  <Project Path="Core/FDL.Core.csproj" Id="fe44a411-40a0-4ecd-89a5-aeec72b45d75" />
+  <Project Path="FDL.Workflow/FDL.Workflow.csproj" Id="d400a758-b6f1-4c7b-9d10-dd90359146e2" />
+  <Project Path="LOC_Module/FDL.Loc.csproj" />
+</Solution>
