@@ -3,6 +3,7 @@
   <Project Path="FDL.WF/FDL.WF.csproj" Id="d400a758-b6f1-4c7b-9d10-dd90359146e2" />
   <Project Path="FDL.Loc/FDL.Loc.csproj" />
   <Folder Name="/Tests/">
+    <Project Path="FDL.Core.Tests/FDL.Core.Tests.csproj" Id="09101ae4-fcfe-489c-bd35-1716577bca2d" />
     <Project Path="FDL.Loc.Tests/FDL.Loc.Tests.csproj" Id="12a79b0f-e497-4e13-97d8-b02609fa8334" />
   </Folder>
 </Solution>
