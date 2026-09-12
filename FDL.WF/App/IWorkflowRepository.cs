@@ -3,7 +3,7 @@ using FDL.WF.Domain;
 
 namespace FDL.WF.App
 {
-    internal interface IWorkflowRepository : IRepositoryReadBase<Workflow>, IRepositoryWriteBase<Workflow>
+    public interface IWorkflowRepository : IReadRepository<Workflow>, IWriteRepository<Workflow>
     {
         Workflow GetByUserAssigned(int idUser);
         Workflow GetByGroupAssigned(int idGroup);

@@ -18,7 +18,7 @@ namespace FDL.Loc.Domain
         Commerce = 3,
         Parking = 4
     }
-    internal class Registre
+    public class Registre
     {
         public int IdRegistre { get; private set; }
         public int IdContrat { get; private set; }

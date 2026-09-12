@@ -1,6 +1,6 @@
 ﻿namespace FDL.Core.App
 {
-    public interface IRepositoryWriteBase<T>
+    public interface IWriteRepository<T>
     {
         public bool Add(T entity);
 
