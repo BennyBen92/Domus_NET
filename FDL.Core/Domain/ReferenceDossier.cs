@@ -9,22 +9,12 @@ namespace FDL.Core.Domain
         /** Propriétés pour le numéro de séquence (Demande ou Contrat).*/
         public int Sequence { get; }
 
-        public bool EstContrat => Sequence is >= 1 and <= 60;
-        public bool EstDemande => Sequence == 0 || Sequence is >= 61 and <= 99;
-        public bool EstNotationHeritee => Sequence == 0;
-
-        /**
-         * Constructeur privé pour forcer l'utilisation de la méthode statique DepuisExistant.
-         */
         private ReferenceDossier(int numeroDossier)
         {
             NumeroDossierValide(numeroDossier);
             NumeroDossier = numeroDossier;
             Sequence = 0;
         }
-        /**
-         * Constructeur par défaut.
-         */
         public ReferenceDossier(int numeroDossier, int sequence)
         {
             NumeroDossierValide(numeroDossier);
@@ -32,10 +22,17 @@ namespace FDL.Core.Domain
             NumeroDossier = numeroDossier;
             Sequence = sequence;
         }
-        /**
-         * Méthode statique pour créer une instance de ReferenceDossier à partir d'un numéro Existant.
-         * Si la séquence est 0, elle crée une instance avec seulement le numéro de dossier.
-         */
+
+        public bool EstContrat => Sequence is >= 1 and <= 60;
+        public bool EstDemande => Sequence == 0 || Sequence is >= 61 and <= 99;
+        public bool EstNotationHeritee => Sequence == 0;
+
+        /// <summary>
+        /// Méthode statique pour créer une instance de ReferenceDossier à partir d'un numéro de dossier et d'une séquence.
+        /// </summary>
+        /// <param name="numeroDossier"></param>
+        /// <param name="sequence"></param>
+        /// <returns></returns>
         public static ReferenceDossier DepuisExistant(int numeroDossier, int sequence)
         {
             if (sequence == 0)
@@ -44,10 +41,14 @@ namespace FDL.Core.Domain
             }
             return new ReferenceDossier(numeroDossier, sequence);
         }
-        /**
-         * Méthode statique pour créer une instance de ReferenceDossier à partir d'une chaîne de caractères.
-         * La chaîne doit être au format "NumeroDossier/Sequence".
-         */
+
+        /// <summary>
+        /// Méthode statique pour créer une instance de ReferenceDossier à partir d'une chaîne de caractères.
+        /// </summary>
+        /// <param name="referenceDossier"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="FormatException"></exception>
         public static ReferenceDossier Parse(string referenceDossier)
         {
             if (string.IsNullOrWhiteSpace(referenceDossier))
@@ -66,11 +67,12 @@ namespace FDL.Core.Domain
 
             return new ReferenceDossier(numeroDossier, sequence);
         }
-        /**
-         * Méthode statique pour essayer de créer une instance de ReferenceDossier à partir d'une chaîne de caractères.
-         * La chaîne doit être au format "NumeroDossier/Sequence".
-         * Retourne true si la conversion a réussi, false sinon.
-         */
+        /// <summary>
+        /// Méthode statique pour essayer de créer une instance de ReferenceDossier à partir d'une chaîne de caractères.
+        /// </summary>
+        /// <param name="referenceDossier"></param>
+        /// <param name="result"></param>
+        /// <returns></returns>
         public static bool TryParse(string referenceDossier, out ReferenceDossier? result)
         {
             result = null;
@@ -85,6 +87,11 @@ namespace FDL.Core.Domain
             }
         }
 
+        /// <summary>
+        /// Méthode privée pour valider le numéro de dossier.
+        /// </summary>
+        /// <param name="numeroDossier"></param>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
         private static void NumeroDossierValide(int numeroDossier)
         {
             if (numeroDossier is < 1 or > 9_999_999)
@@ -92,6 +99,11 @@ namespace FDL.Core.Domain
                 throw new ArgumentOutOfRangeException(nameof(numeroDossier), numeroDossier, "NumeroDossier must be between 1 and 9 999 999");
             }
         }
+        /// <summary>
+        /// Méthode privée pour valider la séquence.
+        /// </summary>
+        /// <param name="sequence"></param>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
         private static void SequenceValide(int sequence)
         {
             if (sequence is < 1 or > 99)
@@ -99,10 +111,13 @@ namespace FDL.Core.Domain
                 throw new ArgumentOutOfRangeException(nameof(sequence), sequence, "Sequence must be between 1 and 99");
             }
         }
-        /**
-         * Méthode toString pour retourner la référence du dossier sous forme de chaîne de caractères.
-         * Exemple : "1.500.123/01"
-         */
+
+        /// <summary>
+        /// Méthode toString pour retourner la référence du dossier sous forme de chaîne de caractères.
+        /// Exemple : "1.500.123/01"
+        /// </summary>
+        /// <returns></returns>
         public override string ToString() => $"{NumeroDossier.ToString("#,0", CultureInfo.InvariantCulture).Replace(',', '.')}/{Sequence:00}";
+
     }
 }

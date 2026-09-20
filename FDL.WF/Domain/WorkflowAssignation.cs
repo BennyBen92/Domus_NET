@@ -1,9 +1,6 @@
 ﻿namespace FDL.WF.Domain
 {
-    /**
-     * Classe représentant l'assignation d'un workflow à un utilisateur ou à un groupe.
-     * Cette classe est immuable et utilise des méthodes statiques pour créer des instances.
-     */
+    // Représente l'assignation d'un workflow à un utilisateur ou à un groupe.
     public sealed record WorkflowAssignation
     {
         public int? IdUser { get; }
@@ -12,18 +9,27 @@
         public bool EstUtilisateur => IdUser.HasValue;
         public bool EstGroupe => IdGroup.HasValue;
 
-        // Constructeur privé pour forcer l'utilisation des méthodes statiques PourUtilisateur et PourGroupe
         private WorkflowAssignation(int? idUser, int? idGroup) => (IdUser, IdGroup) = (idUser, idGroup);
 
-        // Méthode statique pour créer une assignation pour un utilisateur
+        /// <summary>
+        /// Crée une assignation pour un utilisateur.
+        /// </summary>
+        /// <param name="idUser"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
         public static WorkflowAssignation PourUtilisateur(int idUser)
         {
-            return idUser < 0 ? throw new ArgumentOutOfRangeException(nameof(idUser), "L'identifiant de l'utilisateur doit être supérieur à zéro.") : new WorkflowAssignation(idUser, null);
+            return idUser <= 0 ? throw new ArgumentOutOfRangeException(nameof(idUser), "L'identifiant de l'utilisateur doit être supérieur à zéro.") : new WorkflowAssignation(idUser, null);
         }
-        // Méthode statique pour créer une assignation pour un groupe
+
+        /// <summary>
+        /// Crée une assignation pour un groupe.
+        /// </summary>
+        /// <param name="idGroup"></param>
+        /// <returns></returns>
         public static WorkflowAssignation PourGroupe(int idGroup)
         {
-            ArgumentOutOfRangeException.ThrowIfNegative(idGroup, nameof(idGroup));
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(idGroup, nameof(idGroup));
             return new WorkflowAssignation(null, idGroup);
         }
     }

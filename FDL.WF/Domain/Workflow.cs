@@ -2,16 +2,16 @@
 
 namespace FDL.WF.Domain
 {
-    public enum EWorkflowType
+    public enum WorkflowType
     {
-        Aucun = 0,
+        Inconnu = 0,
         Document = 1,
         Note = 2,
         Tache = 3,
     }
-    public enum EWorkflowAction
+    public enum WorkflowAction
     {
-        Aucune = 0,
+        Inconnu = 0,
         ASigner = 1,
         AValider = 2,
         AVerifier = 3,
@@ -28,16 +28,14 @@ namespace FDL.WF.Domain
         // ---
         // Props Infos
         public string Message { get; private set; } = string.Empty;
-        public EWorkflowType Type { get; private set; } = EWorkflowType.Aucun;
-        public EWorkflowAction Action { get; private set; } = EWorkflowAction.Aucune;
+        public WorkflowType Type { get; private set; } = WorkflowType.Inconnu;
+        public WorkflowAction Action { get; private set; } = WorkflowAction.Inconnu;
         // ---
         // Props Assignation
         public WorkflowAssignation Assignation { get; private set; }
-        private int IdUserAssigned { get; set; } = 0;
-        private int IdGroupAssigned { get; set; } = 0;
 
-        public int IdUserTermination { get; private set; } = 0;
-        public DateTime DateTermination { get; private set; } = DateTime.MinValue;
+        public int? IdUserTermination { get; private set; }
+        public DateTime? DateTermination { get; private set; }
         // ---
         // Props Audit
         public int IdUserCreation { get; } = 0;
@@ -46,55 +44,51 @@ namespace FDL.WF.Domain
         public DateTime DateUpdate { get; private set; } = DateTime.Now;
 
         // Constructeur par défaut
-        private Workflow(ReferenceDossier refDossier, EWorkflowType type, EWorkflowAction action, WorkflowAssignation assignation, string message)
+        private Workflow(ReferenceDossier refDossier, WorkflowType type, WorkflowAction action, WorkflowAssignation assignation, string message)
         {
             RefDossier = refDossier;
             Type = type;
             Action = action;
             Message = message;
             Assignation = assignation;
-            IdUserAssigned = assignation.IdUser ?? 0;
-            IdGroupAssigned = assignation.IdGroup ?? 0;
         }
-        private Workflow(ReferenceDossier refDossier, EWorkflowType type, EWorkflowAction action, WorkflowAssignation assignation, string message, int idDocument)
+        private Workflow(ReferenceDossier refDossier, WorkflowType type, WorkflowAction action, WorkflowAssignation assignation, string message, int idDocument)
             : this(refDossier, type, action, assignation, message)
         {
             IdDocument = idDocument;
         }
 
+        public bool EstTermine => IdUserTermination.HasValue && DateTermination.HasValue;
+
         // Méthodes statiques pour créer des instances de Workflow
-        public static Workflow PourNote(ReferenceDossier refDossier, EWorkflowAction action, WorkflowAssignation assignation, string message)
+        public static Workflow PourNote(ReferenceDossier refDossier, WorkflowAction action, WorkflowAssignation assignation, string message)
         {
-            return new Workflow(refDossier, EWorkflowType.Note, action, assignation, message);
+            return new Workflow(refDossier, WorkflowType.Note, action, assignation, message);
         }
-        public static Workflow PourDocument(ReferenceDossier refDossier, EWorkflowAction action, WorkflowAssignation assignation, string message, int idDocument)
+        public static Workflow PourDocument(ReferenceDossier refDossier, WorkflowAction action, WorkflowAssignation assignation, string message, int idDocument)
         {
-            return new Workflow(refDossier, EWorkflowType.Document, action, assignation, message, idDocument);
+            return new Workflow(refDossier, WorkflowType.Document, action, assignation, message, idDocument);
         }
-        public static Workflow PourTache(ReferenceDossier refDossier, EWorkflowAction action, WorkflowAssignation assignation, string message)
+        public static Workflow PourTache(ReferenceDossier refDossier, WorkflowAction action, WorkflowAssignation assignation, string message)
         {
-            return new Workflow(refDossier, EWorkflowType.Tache, action, assignation, message);
+            return new Workflow(refDossier, WorkflowType.Tache, action, assignation, message);
         }
 
-        /**
-         * Méthode pour réassigner le workflow à une nouvelle assignation.
-         * Cette méthode met à jour l'assignation ainsi que les identifiants d'utilisateur et de groupe assignés.
-         */
-        public void Réassigner(WorkflowAssignation nouvelleAssignation)
+        /// <summary>
+        /// Réassigne le workflow à une nouvelle assignation.
+        /// </summary>
+        /// <param name="nouvelleAssignation">La nouvelle assignation.</param>
+        public void Reassigner(WorkflowAssignation nouvelleAssignation)
         {
             Assignation = nouvelleAssignation;
-            IdUserAssigned = nouvelleAssignation.IdUser ?? 0;
-            IdGroupAssigned = nouvelleAssignation.IdGroup ?? 0;
         }
-        /**
-         * Méthode pour terminer le workflow.
-         * Cette méthode met à jour l'identifiant de l'utilisateur qui termine le workflow ainsi que la date de terminaison.
-         * @param idUser L'identifiant de l'utilisateur qui termine le workflow.
-         * @throws ArgumentOutOfRangeException Si l'identifiant de l'utilisateur est inférieur ou égal à zéro.
-         */
+        /// <summary>
+        /// Marque le workflow comme terminé en enregistrant l'identifiant de l'utilisateur qui a terminé le workflow et la date de terminaison.
+        /// </summary>
+        /// <param name="idUser"></param>
         public void Terminer(int idUser)
         {
-            ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(idUser, 0, nameof(idUser));
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(idUser, nameof(idUser));
             IdUserTermination = idUser;
             DateTermination = DateTime.Now;
         }
