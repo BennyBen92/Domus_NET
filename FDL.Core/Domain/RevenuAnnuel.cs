@@ -12,6 +12,7 @@
     {
         public decimal Montant { get; set; }
         public TypeRevenu Type { get; set; }
+
         public RevenuAnnuel()
         {
             Montant = 0;

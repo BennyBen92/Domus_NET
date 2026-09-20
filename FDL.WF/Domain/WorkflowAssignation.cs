@@ -15,7 +15,6 @@
         /// Crée une assignation pour un utilisateur.
         /// </summary>
         /// <param name="idUser"></param>
-        /// <returns></returns>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         public static WorkflowAssignation PourUtilisateur(int idUser)
         {
@@ -26,7 +25,6 @@
         /// Crée une assignation pour un groupe.
         /// </summary>
         /// <param name="idGroup"></param>
-        /// <returns></returns>
         public static WorkflowAssignation PourGroupe(int idGroup)
         {
             ArgumentOutOfRangeException.ThrowIfNegativeOrZero(idGroup, nameof(idGroup));

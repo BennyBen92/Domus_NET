@@ -4,9 +4,9 @@ namespace FDL.Core.Domain
 {
     public sealed record ReferenceDossier
     {
-        /** Propriétés pour le numéro de dossier.*/
+        // Propriétés pour le numéro de dossier.
         public int NumeroDossier { get; }
-        /** Propriétés pour le numéro de séquence (Demande ou Contrat).*/
+        // Propriétés pour le numéro de séquence (Demande ou Contrat).
         public int Sequence { get; }
 
         private ReferenceDossier(int numeroDossier)
@@ -32,7 +32,6 @@ namespace FDL.Core.Domain
         /// </summary>
         /// <param name="numeroDossier"></param>
         /// <param name="sequence"></param>
-        /// <returns></returns>
         public static ReferenceDossier DepuisExistant(int numeroDossier, int sequence)
         {
             if (sequence == 0)
@@ -46,7 +45,6 @@ namespace FDL.Core.Domain
         /// Méthode statique pour créer une instance de ReferenceDossier à partir d'une chaîne de caractères.
         /// </summary>
         /// <param name="referenceDossier"></param>
-        /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="FormatException"></exception>
         public static ReferenceDossier Parse(string referenceDossier)
@@ -72,7 +70,6 @@ namespace FDL.Core.Domain
         /// </summary>
         /// <param name="referenceDossier"></param>
         /// <param name="result"></param>
-        /// <returns></returns>
         public static bool TryParse(string referenceDossier, out ReferenceDossier? result)
         {
             result = null;
@@ -116,7 +113,6 @@ namespace FDL.Core.Domain
         /// Méthode toString pour retourner la référence du dossier sous forme de chaîne de caractères.
         /// Exemple : "1.500.123/01"
         /// </summary>
-        /// <returns></returns>
         public override string ToString() => $"{NumeroDossier.ToString("#,0", CultureInfo.InvariantCulture).Replace(',', '.')}/{Sequence:00}";
 
     }

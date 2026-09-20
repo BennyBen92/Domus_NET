@@ -20,9 +20,7 @@ namespace FDL.Loc.Domain
         Parking = 4
     }
 
-    /**
-     * Un Registre est une demande d'aide locative.
-     */
+    // Un Registre est une demande d'aide locative.
     public class Registre
     {
         public int IdRegistre { get; }
@@ -37,9 +35,6 @@ namespace FDL.Loc.Domain
         public DateTime DateUpdate { get; }
         public int IdUserUpdate { get; }
 
-        /**
-         * Constructeur par défaut
-         */
         public Registre(ReferenceDossier referenceDossier, RegistreType type, RegistreStatut statut)
         {
             // Vérifie que la référence de dossier est une demande
