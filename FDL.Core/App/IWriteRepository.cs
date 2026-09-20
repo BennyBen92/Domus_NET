@@ -2,7 +2,8 @@
 {
     public interface IWriteRepository<T>
     {
-        public bool Add(T entity);
+        public int Add(T entity);
+        public void Update(T entity);
 
     }
 }
