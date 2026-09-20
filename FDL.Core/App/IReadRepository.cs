@@ -2,7 +2,7 @@
 {
     public interface IReadRepository<T>
     {
-        public T GetById(int id);
+        public T? GetById(int id);
         public IEnumerable<T> GetAll();
 
     }
