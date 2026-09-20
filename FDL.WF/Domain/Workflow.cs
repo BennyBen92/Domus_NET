@@ -34,8 +34,6 @@ namespace FDL.WF.Domain
         // Props Assignation
         public WorkflowAssignation Assignation { get; private set; }
 
-        public int? IdUserTermination { get; private set; }
-        public DateTime? DateTermination { get; private set; }
         // ---
         // Props Audit
         public int IdUserCreation { get; } = 0;
@@ -58,7 +56,7 @@ namespace FDL.WF.Domain
             IdDocument = idDocument;
         }
 
-        public bool EstTermine => IdUserTermination.HasValue && DateTermination.HasValue;
+        public bool EstTermine => Terminaison is not null;
 
         // Méthodes statiques pour créer des instances de Workflow
         public static Workflow PourNote(ReferenceDossier refDossier, WorkflowAction action, WorkflowAssignation assignation, string message)
@@ -93,8 +91,7 @@ namespace FDL.WF.Domain
             {
                 throw new InvalidOperationException("Le workflow est déjà terminé.");
             }
-            IdUserTermination = idUser;
-            DateTermination = DateTime.Now;
+            Terminaison = new WorkflowTerminaison(idUser, DateTime.Now);
         }
     }
 }
