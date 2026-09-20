@@ -15,7 +15,7 @@ namespace FDL.Core.Domain
             NumeroDossier = numeroDossier;
             Sequence = 0;
         }
-        public ReferenceDossier(int numeroDossier, int sequence)
+        private ReferenceDossier(int numeroDossier, int sequence)
         {
             NumeroDossierValide(numeroDossier);
             SequenceValide(sequence);
