@@ -10,8 +10,4 @@
     <ProjectReference Include="..\FDL.Core\FDL.Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Domain\" />
-  </ItemGroup>
-
 </Project>
