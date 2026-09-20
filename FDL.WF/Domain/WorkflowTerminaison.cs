@@ -1,7 +1,17 @@
 ﻿namespace FDL.WF.Domain
 {
-    public sealed record WorkflowTerminaison(int IdUserTermination, DateTime DateTermination)
+    public sealed record WorkflowTerminaison
     {
-        public bool EstTermine => IdUserTermination > 0 && DateTermination != default;
+        public int IdUser { get; }
+        public DateTime Date { get; }
+
+        public WorkflowTerminaison(int idUser, DateTime date)
+        {
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(idUser, nameof(idUser));
+            if (date == default)
+                throw new ArgumentException("La date de terminaison est obligatoire.", nameof(date));
+            IdUser = idUser;
+            Date = date;
+        }
     }
 }

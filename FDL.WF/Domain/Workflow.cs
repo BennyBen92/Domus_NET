@@ -33,7 +33,9 @@ namespace FDL.WF.Domain
         // ---
         // Props Assignation
         public WorkflowAssignation Assignation { get; private set; }
-        public WorkflowTerminaison? Terminaison;
+        // ---
+        // Props Terminaison
+        public WorkflowTerminaison? Terminaison { get; private set; }
 
         // ---
         // Props Audit
