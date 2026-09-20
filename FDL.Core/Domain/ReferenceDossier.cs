@@ -66,6 +66,24 @@ namespace FDL.Core.Domain
 
             return new ReferenceDossier(numeroDossier, sequence);
         }
+        /**
+         * Méthode statique pour essayer de créer une instance de ReferenceDossier à partir d'une chaîne de caractères.
+         * La chaîne doit être au format "NumeroDossier/Sequence".
+         * Retourne true si la conversion a réussi, false sinon.
+         */
+        public static bool TryParse(string referenceDossier, out ReferenceDossier? result)
+        {
+            result = null;
+            try
+            {
+                result = Parse(referenceDossier);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
 
         private static void NumeroDossierValide(int numeroDossier)
         {
