@@ -89,6 +89,10 @@ namespace FDL.WF.Domain
         public void Terminer(int idUser)
         {
             ArgumentOutOfRangeException.ThrowIfNegativeOrZero(idUser, nameof(idUser));
+            if (EstTermine)
+            {
+                throw new InvalidOperationException("Le workflow est déjà terminé.");
+            }
             IdUserTermination = idUser;
             DateTermination = DateTime.Now;
         }
