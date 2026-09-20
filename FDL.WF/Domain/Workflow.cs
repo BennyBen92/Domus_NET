@@ -1,58 +1,67 @@
-﻿namespace FDL.WF.Domain
+﻿using FDL.Core.Domain;
+
+namespace FDL.WF.Domain
 {
     public enum EWorkflowType
     {
-        None = 0,
+        Aucun = 0,
         Document = 1,
         Note = 2,
-        Task = 3,
+        Tache = 3,
     }
     public enum EWorkflowAction
     {
-        None = 0,
-        ToSign = 1,
-        ToValidate = 2,
-        ToCheck = 3,
-        ToCorrect = 4,
-        ToRead = 5
+        Aucune = 0,
+        ASigner = 1,
+        AValider = 2,
+        AVerifier = 3,
+        ACorriger = 4,
+        ALire = 5
     }
 
     public class Workflow
     {
-        public int IdWorkflow { get; private set; }
-        public int IdDocument { get; set; }
-        public string Message { get; set; }
-        public EWorkflowType Type{ get; set; }
-        public EWorkflowAction Action { get; set; }
-        public int IdUserAssigned { get; set; }
-        public int IdGroupAssigned { get; set; }
+        // Props Ids
+        public int IdWorkflow { get; } = 0;
+        public int IdDocument { get; set; } = 0;
+        public ReferenceDossier RefDossier { get; }
+        // ---
+        // Props Infos
+        public string Message { get; set; } = string.Empty;
+        public EWorkflowType Type { get; set; } = EWorkflowType.Aucun;
+        public EWorkflowAction Action { get; set; } = EWorkflowAction.Aucune;
+        // ---
+        // Props Assignation
+        public int IdUserAssigned { get; set; } = 0;
+        public int IdGroupAssigned { get; set; } = 0;
+        public int IdUserTermination { get; } = 0;
+        public DateTime DateTermination { get; } = DateTime.Now;
+        // ---
+        // Props Audit
+        public int IdUserCreation { get; } = 0;
+        public DateTime DateCreation { get; } = DateTime.Now;
+        public int IdUserUpdate { get; } = 0;
+        public DateTime DateUpdate { get; } = DateTime.Now;
 
-        public int IdUserTermination { get; private set; }
-        public DateTime DateTermination { get; private set; }
-
-        public int IdUserCreation { get; private set; }
-        public DateTime DateCreation { get; private set; }
-        public int IdUserUpdate { get; private set; }
-        public DateTime DateUpdate { get; private set; }
-
-        public Workflow()
+        // Constructeur par défaut
+        public Workflow(ReferenceDossier refDossier)
         {
-            IdUserCreation = 0;
-            DateCreation = DateTime.Now;
-            IdUserUpdate = 0;
-            DateUpdate = DateTime.Now;
-
-            Message = string.Empty;
-            Type = EWorkflowType.None;
-            Action = EWorkflowAction.None;
-            IdUserAssigned = 0;
-            IdGroupAssigned = 0;
+            RefDossier = refDossier;
             
-            IdUserTermination = 0;
-            DateTermination = DateTime.MinValue;
-
         }
 
+        public Workflow(ReferenceDossier refDossier, EWorkflowType type, EWorkflowAction action, string message, int idDocument)
+            : this(refDossier)
+        {
+            Type = type;
+            Action = action;
+            Message = message;
+            // lequel ?
+            IdUserAssigned = 0;
+            IdGroupAssigned = 0;
+
+            IdDocument = idDocument;
+        }
 
     }
 }
