@@ -60,17 +60,18 @@ namespace FDL.WF.Domain
         public bool EstTermine => Terminaison is not null;
 
         // Méthodes statiques pour créer des instances de Workflow
-        public static Workflow PourNote(ReferenceDossier refDossier, WorkflowAction action, WorkflowAssignation assignation, string message)
+        public static Workflow PourNote(ReferenceDossier refDossier, WorkflowAssignation assignation, string message)
         {
-            return new Workflow(refDossier, WorkflowType.Note, action, assignation, message);
+            return new Workflow(refDossier, WorkflowType.Note, WorkflowAction.ALire, assignation, message);
         }
         public static Workflow PourDocument(ReferenceDossier refDossier, WorkflowAction action, WorkflowAssignation assignation, string message, int idDocument)
         {
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(idDocument, nameof(idDocument));
             return new Workflow(refDossier, WorkflowType.Document, action, assignation, message, idDocument);
         }
-        public static Workflow PourTache(ReferenceDossier refDossier, WorkflowAction action, WorkflowAssignation assignation, string message)
+        public static Workflow PourTache(ReferenceDossier refDossier, WorkflowAssignation assignation, string message)
         {
-            return new Workflow(refDossier, WorkflowType.Tache, action, assignation, message);
+            return new Workflow(refDossier, WorkflowType.Tache, WorkflowAction.AValider, assignation, message);
         }
 
         /// <summary>
@@ -79,6 +80,10 @@ namespace FDL.WF.Domain
         /// <param name="nouvelleAssignation">La nouvelle assignation.</param>
         public void Reassigner(WorkflowAssignation nouvelleAssignation)
         {
+            if (EstTermine)
+            {
+                throw new InvalidOperationException("Le workflow est terminé et ne peut pas être réassigné.");
+            }
             Assignation = nouvelleAssignation;
         }
         /// <summary>
