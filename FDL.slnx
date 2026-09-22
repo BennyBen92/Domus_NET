@@ -5,5 +5,6 @@
   <Folder Name="/Tests/">
     <Project Path="FDL.Core.Tests/FDL.Core.Tests.csproj" Id="09101ae4-fcfe-489c-bd35-1716577bca2d" />
     <Project Path="FDL.Loc.Tests/FDL.Loc.Tests.csproj" Id="12a79b0f-e497-4e13-97d8-b02609fa8334" />
+    <Project Path="FDL.WF.Tests/FDL.WF.Tests.csproj" Id="4092887f-c59b-43f2-b366-a4154ad0b442" />
   </Folder>
 </Solution>

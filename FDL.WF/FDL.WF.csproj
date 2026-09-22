@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Domain\WorkflowTerminaison.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\FDL.Core\FDL.Core.csproj" />
   </ItemGroup>
 
