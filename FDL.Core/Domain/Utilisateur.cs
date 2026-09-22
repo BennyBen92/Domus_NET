@@ -9,12 +9,13 @@
         public IReadOnlyList<Groupe> Groupes => _groupes;
         // ------------------------------------------------------------
 
-        public Utilisateur(int id, string nom)
+        public Utilisateur(int id, string nom, IEnumerable<Groupe>? groupes = null)
         {
             ArgumentOutOfRangeException.ThrowIfNegativeOrZero(id, nameof(id));
             ArgumentException.ThrowIfNullOrWhiteSpace(nom);
             Id = id;
             Nom = nom;
+            if (groupes is not null) _groupes.AddRange(groupes);
         }
     }
 }
