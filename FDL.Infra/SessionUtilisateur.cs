@@ -9,7 +9,7 @@ namespace FDL.Infra
         private IReadOnlyList<int> _idGroupes = [];
         // ------------------------------------------------------------
 
-        public Utilisateur UtilisateurConnecte => _utilisateur ?? throw new InvalidOperationException("L'utilisateur n'est pas connecté.");
+        private Utilisateur UtilisateurConnecte => _utilisateur ?? throw new InvalidOperationException("L'utilisateur n'est pas connecté.");
         public int Id => UtilisateurConnecte.Id;
         public IReadOnlyList<int> IdGroupes
         {
@@ -21,6 +21,7 @@ namespace FDL.Infra
         public void Connecter(Utilisateur utilisateur)
         {
             ArgumentNullException.ThrowIfNull(utilisateur, nameof(utilisateur));
+            // Les groupes sont déjà chargés dans utilisateur
             _utilisateur = utilisateur;
             _idGroupes = [.. utilisateur.Groupes.Select(g => g.Id)];
         }
