@@ -4,14 +4,12 @@ namespace FDL.WF.Domain
 {
     public enum WorkflowType
     {
-        Inconnu = 0,
         Document = 1,
         Note = 2,
         Tache = 3,
     }
     public enum WorkflowAction
     {
-        Inconnu = 0,
         ASigner = 1,
         AValider = 2,
         AVerifier = 3,
@@ -25,18 +23,18 @@ namespace FDL.WF.Domain
     public class Workflow
     {
         // Props Ids
-        public int IdWorkflow { get; private set; } = 0;
-        public int IdDocument { get; } = 0;
+        public int IdWorkflow { get; private set; }
+        public int IdDocument { get; }
         public ReferenceDossier RefDossier { get; }
-        
+
         // Props Infos
-        public string Message { get; } = string.Empty;
-        public WorkflowType Type { get; } = WorkflowType.Inconnu;
-        public WorkflowAction Action { get; } = WorkflowAction.Inconnu;
-        
+        public string Message { get; }
+        public WorkflowType Type { get; }
+        public WorkflowAction Action { get; }
+
         // A qui est assigné le wf
         public WorkflowAssignation Assignation { get; private set; }
-        
+
         // Qui a validé, terminé le wf
         public AuditInfo? Terminaison { get; private set; }
 
@@ -46,7 +44,7 @@ namespace FDL.WF.Domain
 
 
         // Constructeur par défaut
-        private Workflow(ReferenceDossier refDossier, AuditInfo expediteur , WorkflowAssignation assignation, string message, WorkflowType type, WorkflowAction action)
+        private Workflow(ReferenceDossier refDossier, AuditInfo expediteur, WorkflowAssignation assignation, string message, WorkflowType type, WorkflowAction action)
         {
             RefDossier = refDossier;
             Expediteur = expediteur;
@@ -59,6 +57,11 @@ namespace FDL.WF.Domain
             : this(refDossier, expediteur, assignation, message, type, action)
         {
             IdDocument = idDocument;
+        }
+        private Workflow(int idWorkflow, ReferenceDossier refDossier, AuditInfo expediteur, WorkflowAssignation assignation, string message, WorkflowType type, WorkflowAction action, int idDocument, AuditInfo terminaison)
+            : this(refDossier, expediteur, assignation, message, type, action)
+        {
+            Terminaison = terminaison;
         }
         // ------------------------------------------------------------
 
@@ -109,6 +112,13 @@ namespace FDL.WF.Domain
         {
             return new Workflow(refDossier, expediteur, assignation, message, WorkflowType.Tache, WorkflowAction.AValider);
         }
+        // ------------------------------------------------------------
+
+        public static Workflow Reconstituer(int idWorkflow, ReferenceDossier refDossier, AuditInfo expediteur, WorkflowAssignation assignation, string message, WorkflowType type, WorkflowAction action, int idDocument, AuditInfo? terminaison)
+        {
+            return new Workflow(idWorkflow, refDossier, expediteur, assignation, message, type, action, idDocument, terminaison);
+        }
+
         // ------------------------------------------------------------
 
 

@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FDL.Core\FDL.Core.csproj" />
+    <ProjectReference Include="..\FDL.WF\FDL.WF.csproj" />
   </ItemGroup>
 
 </Project>
