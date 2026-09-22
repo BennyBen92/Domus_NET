@@ -1,16 +1,17 @@
 ﻿namespace FDL.Core.Domain
 {
-    public class Groupe
+    public sealed class Groupe
     {
-        public int IdGroupe { get; private set; }
-        public string Name { get; set; } = string.Empty;
+        public int Id { get; }
+        public string Nom { get; }
         // ------------------------------------------------------------
 
-        public Groupe(int idGroupe, string name)
+        public Groupe(int id, string nom)
         {
-            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(idGroupe, nameof(idGroupe));
-            IdGroupe = idGroupe;
-            Name = name;
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(id, nameof(id));
+            ArgumentException.ThrowIfNullOrWhiteSpace(Nom,nameof(Nom));
+            Id = id;
+            Nom = nom;
         }
 
     }
