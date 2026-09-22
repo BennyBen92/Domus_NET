@@ -1,5 +1,4 @@
 ﻿using FDL.Core.Domain;
-using Xunit.Abstractions;
 
 namespace FDL.Core.Tests
 {
@@ -10,7 +9,7 @@ namespace FDL.Core.Tests
         [Fact]
         public void Creation_AvecSequence0_EstRefusee()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => new ReferenceDossier(1_500_123, 0));
+            Assert.Throws<ArgumentOutOfRangeException>(() => ReferenceDossier.DepuisExistant(1_500_123, 0));
         }
         [Fact]
         public void DepuisExistant_AvecSequence0_EstUneDemandeHeritee()
@@ -24,7 +23,7 @@ namespace FDL.Core.Tests
         [InlineData(9_999_999, 1)]
         public void ToString_PuisParse_RedonneLaMemeReference(int dossier, int sequence)
         {
-            var origine = new ReferenceDossier(dossier, sequence);
+            var origine = ReferenceDossier.DepuisExistant(dossier, sequence);
             _output.WriteLine($"Origine: {origine}");
             Assert.Equal(origine, ReferenceDossier.Parse(origine.ToString()));
         }
