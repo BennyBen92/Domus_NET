@@ -53,7 +53,6 @@ namespace FDL.WF.App
         /// <param name="refDossier"></param>
         /// <param name="assignation"></param>
         /// <param name="message"></param>
-        /// <returns name="idWorkflow"></returns>
         public int CreerPourTache(ReferenceDossier refDossier, WorkflowAssignation assignation, string message)
         {
             var workflow = Workflow.PourTache(refDossier, FaitPar(), assignation, message);
@@ -76,7 +75,6 @@ namespace FDL.WF.App
         /// <summary>
         /// Récupère la liste des workflows en cours de mes groupes
         /// </summary>
-        /// <returns></returns>
         public IReadOnlyList<Workflow> WorkflowsDeMesGroupes()
         {
             return _workflowRepository.Search(new WorkflowFiltre(
