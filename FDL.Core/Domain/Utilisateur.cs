@@ -1,17 +1,20 @@
 ﻿namespace FDL.Core.Domain
 {
-    public class Utilisateur
+    public sealed class Utilisateur
     {
-        public int IdUser { get; private set; }
-        public string Name { get; set; } = string.Empty;
-        public List<Groupe> Groupes { get; set; } = [];
+        private readonly List<Groupe> _groupes = [];
+
+        public int Id { get; }
+        public string Nom { get; }
+        public IReadOnlyList<Groupe> Groupes => _groupes;
         // ------------------------------------------------------------
 
-        public Utilisateur(int idUser, string name)
+        public Utilisateur(int id, string nom)
         {
-            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(idUser, nameof(idUser));
-            IdUser = idUser;
-            Name = name;
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(id, nameof(id));
+            ArgumentException.ThrowIfNullOrWhiteSpace(nom);
+            Id = id;
+            Nom = nom;
         }
     }
 }
