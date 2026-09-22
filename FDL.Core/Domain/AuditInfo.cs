@@ -1,15 +1,15 @@
-﻿namespace FDL.WF.Domain
+﻿namespace FDL.Core.Domain
 {
-    public sealed record WorkflowTerminaison
+    public sealed record AuditInfo
     {
         public int IdUser { get; }
         public DateTime Date { get; }
 
-        public WorkflowTerminaison(int idUser, DateTime date)
+        public AuditInfo(int idUser, DateTime date)
         {
             ArgumentOutOfRangeException.ThrowIfNegativeOrZero(idUser, nameof(idUser));
             if (date == default)
-                throw new ArgumentException("La date de terminaison est obligatoire.", nameof(date));
+                throw new ArgumentException("La date est obligatoire.", nameof(date));
             IdUser = idUser;
             Date = date;
         }

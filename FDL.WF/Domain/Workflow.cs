@@ -35,45 +35,49 @@ namespace FDL.WF.Domain
         public WorkflowAssignation Assignation { get; private set; }
         // ---
         // Props Terminaison
-        public WorkflowTerminaison? Terminaison { get; private set; }
+        public AuditInfo? Terminaison { get; private set; }
 
-        // ---
-        // Props Audit
-        public int IdUserCreation { get; } = 0;
-        public DateTime DateCreation { get; } = DateTime.Now;
-        public int IdUserUpdate { get; private set; } = 0;
-        public DateTime DateUpdate { get; private set; } = DateTime.Now;
+        public AuditInfo Creation { get; private set; }
+        // ------------------------------------------------------------
+
 
         // Constructeur par défaut
-        private Workflow(ReferenceDossier refDossier, WorkflowType type, WorkflowAction action, WorkflowAssignation assignation, string message)
+        private Workflow(ReferenceDossier refDossier, AuditInfo expediteur , WorkflowAssignation assignation, string message, WorkflowType type, WorkflowAction action)
         {
             RefDossier = refDossier;
+            Creation = expediteur;
+            Assignation = assignation;
+            Message = message;
             Type = type;
             Action = action;
             Message = message;
             Assignation = assignation;
         }
-        private Workflow(ReferenceDossier refDossier, WorkflowType type, WorkflowAction action, WorkflowAssignation assignation, string message, int idDocument)
-            : this(refDossier, type, action, assignation, message)
+        private Workflow(ReferenceDossier refDossier, AuditInfo expediteur, WorkflowAssignation assignation, string message, WorkflowType type, WorkflowAction action, int idDocument)
+            : this(refDossier, expediteur, assignation, message, type, action)
         {
             IdDocument = idDocument;
         }
+        // ------------------------------------------------------------
 
         public bool EstTermine => Terminaison is not null;
 
         // Méthodes statiques pour créer des instances de Workflow
         public static Workflow PourNote(ReferenceDossier refDossier, WorkflowAssignation assignation, string message)
+        public static Workflow PourNote(ReferenceDossier refDossier, AuditInfo expediteur, WorkflowAssignation assignation, string message)
         {
-            return new Workflow(refDossier, WorkflowType.Note, WorkflowAction.ALire, assignation, message);
+            return new Workflow(refDossier, expediteur, assignation, message, WorkflowType.Note, WorkflowAction.ALire);
         }
         public static Workflow PourDocument(ReferenceDossier refDossier, WorkflowAction action, WorkflowAssignation assignation, string message, int idDocument)
+        public static Workflow PourDocument(ReferenceDossier refDossier, AuditInfo expediteur, WorkflowAssignation assignation, string message, WorkflowAction action, int idDocument)
         {
             ArgumentOutOfRangeException.ThrowIfNegativeOrZero(idDocument, nameof(idDocument));
-            return new Workflow(refDossier, WorkflowType.Document, action, assignation, message, idDocument);
+            return new Workflow(refDossier, expediteur, assignation, message, WorkflowType.Document, action, idDocument);
         }
         public static Workflow PourTache(ReferenceDossier refDossier, WorkflowAssignation assignation, string message)
+        public static Workflow PourTache(ReferenceDossier refDossier, AuditInfo expediteur, WorkflowAssignation assignation, string message)
         {
-            return new Workflow(refDossier, WorkflowType.Tache, WorkflowAction.AValider, assignation, message);
+            return new Workflow(refDossier, expediteur, assignation, message, WorkflowType.Tache, WorkflowAction.AValider);
         }
 
         /// <summary>
@@ -92,14 +96,14 @@ namespace FDL.WF.Domain
         /// Marque le workflow comme terminé en enregistrant l'identifiant de l'utilisateur qui a terminé le workflow et la date de terminaison.
         /// </summary>
         /// <param name="idUser"></param>
-        public void Terminer(int idUser)
+        public void Terminer(AuditInfo auditInfo)
         {
             ArgumentOutOfRangeException.ThrowIfNegativeOrZero(idUser, nameof(idUser));
             if (EstTermine)
             {
                 throw new InvalidOperationException("Le workflow est déjà terminé.");
             }
-            Terminaison = new WorkflowTerminaison(idUser, DateTime.Now);
+            Terminaison = auditInfo;
         }
     }
 }
