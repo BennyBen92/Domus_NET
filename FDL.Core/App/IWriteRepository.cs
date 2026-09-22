@@ -4,6 +4,5 @@
     {
         public int Add(T entity);
         public void Update(T entity);
-
     }
 }

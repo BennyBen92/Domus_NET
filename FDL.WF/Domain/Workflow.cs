@@ -18,6 +18,9 @@ namespace FDL.WF.Domain
         ACorriger = 4,
         ALire = 5
     }
+    // ------------------------------------------------------------
+    // ------------------------------------------------------------
+
 
     public class Workflow
     {
@@ -25,15 +28,15 @@ namespace FDL.WF.Domain
         public int IdWorkflow { get; private set; } = 0;
         public int IdDocument { get; private set; } = 0;
         public ReferenceDossier RefDossier { get; }
-        // ---
+        
         // Props Infos
         public string Message { get; private set; } = string.Empty;
         public WorkflowType Type { get; private set; } = WorkflowType.Inconnu;
         public WorkflowAction Action { get; private set; } = WorkflowAction.Inconnu;
-        // ---
+        
         // Props Assignation
         public WorkflowAssignation Assignation { get; private set; }
-        // ---
+        
         // Props Terminaison
         public AuditInfo? Terminaison { get; private set; }
 
@@ -50,8 +53,6 @@ namespace FDL.WF.Domain
             Message = message;
             Type = type;
             Action = action;
-            Message = message;
-            Assignation = assignation;
         }
         private Workflow(ReferenceDossier refDossier, AuditInfo expediteur, WorkflowAssignation assignation, string message, WorkflowType type, WorkflowAction action, int idDocument)
             : this(refDossier, expediteur, assignation, message, type, action)
@@ -60,25 +61,55 @@ namespace FDL.WF.Domain
         }
         // ------------------------------------------------------------
 
-        public bool EstTermine => Terminaison is not null;
 
-        // Méthodes statiques pour créer des instances de Workflow
-        public static Workflow PourNote(ReferenceDossier refDossier, WorkflowAssignation assignation, string message)
+        public bool EstTermine => Terminaison is not null;
+        // ------------------------------------------------------------
+
+
+        // Fabrique pour créer des instances de Workflow
+        /// <summary>
+        /// Crée un workflow de type Note avec l'action ALire.
+        /// </summary>
+        /// <param name="refDossier"></param>
+        /// <param name="expediteur"></param>
+        /// <param name="assignation"></param>
+        /// <param name="message"></param>
+        /// <returns></returns>
         public static Workflow PourNote(ReferenceDossier refDossier, AuditInfo expediteur, WorkflowAssignation assignation, string message)
         {
             return new Workflow(refDossier, expediteur, assignation, message, WorkflowType.Note, WorkflowAction.ALire);
         }
-        public static Workflow PourDocument(ReferenceDossier refDossier, WorkflowAction action, WorkflowAssignation assignation, string message, int idDocument)
+
+        /// <summary>
+        /// Crée un workflow de type Document avec l'action spécifiée et l'identifiant du document.
+        /// </summary>
+        /// <param name="refDossier"></param>
+        /// <param name="expediteur"></param>
+        /// <param name="assignation"></param>
+        /// <param name="message"></param>
+        /// <param name="action"></param>
+        /// <param name="idDocument"></param>
+        /// <returns></returns>
         public static Workflow PourDocument(ReferenceDossier refDossier, AuditInfo expediteur, WorkflowAssignation assignation, string message, WorkflowAction action, int idDocument)
         {
             ArgumentOutOfRangeException.ThrowIfNegativeOrZero(idDocument, nameof(idDocument));
             return new Workflow(refDossier, expediteur, assignation, message, WorkflowType.Document, action, idDocument);
         }
-        public static Workflow PourTache(ReferenceDossier refDossier, WorkflowAssignation assignation, string message)
+
+        /// <summary>
+        /// Crée un workflow de type Tache avec l'action AValider.
+        /// </summary>
+        /// <param name="refDossier"></param>
+        /// <param name="expediteur"></param>
+        /// <param name="assignation"></param>
+        /// <param name="message"></param>
+        /// <returns></returns>
         public static Workflow PourTache(ReferenceDossier refDossier, AuditInfo expediteur, WorkflowAssignation assignation, string message)
         {
             return new Workflow(refDossier, expediteur, assignation, message, WorkflowType.Tache, WorkflowAction.AValider);
         }
+        // ------------------------------------------------------------
+
 
         /// <summary>
         /// Réassigne le workflow à une nouvelle assignation.
@@ -92,13 +123,13 @@ namespace FDL.WF.Domain
             }
             Assignation = nouvelleAssignation;
         }
+
         /// <summary>
         /// Marque le workflow comme terminé en enregistrant l'identifiant de l'utilisateur qui a terminé le workflow et la date de terminaison.
-        /// </summary>
-        /// <param name="idUser"></param>
+        /// </summary> 
+        /// <param name="auditInfo">Les informations d'audit.</param>
         public void Terminer(AuditInfo auditInfo)
         {
-            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(idUser, nameof(idUser));
             if (EstTermine)
             {
                 throw new InvalidOperationException("Le workflow est déjà terminé.");
