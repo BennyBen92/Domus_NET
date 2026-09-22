@@ -18,7 +18,8 @@
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         public static WorkflowAssignation PourUtilisateur(int idUser)
         {
-            return idUser <= 0 ? throw new ArgumentOutOfRangeException(nameof(idUser), "L'identifiant de l'utilisateur doit être supérieur à zéro.") : new WorkflowAssignation(idUser, null);
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(idUser, nameof(idUser));
+            return new WorkflowAssignation(idUser, null);
         }
 
         /// <summary>
