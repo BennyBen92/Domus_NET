@@ -26,21 +26,22 @@ namespace FDL.WF.Domain
     {
         // Props Ids
         public int IdWorkflow { get; private set; } = 0;
-        public int IdDocument { get; private set; } = 0;
+        public int IdDocument { get; } = 0;
         public ReferenceDossier RefDossier { get; }
         
         // Props Infos
-        public string Message { get; private set; } = string.Empty;
-        public WorkflowType Type { get; private set; } = WorkflowType.Inconnu;
-        public WorkflowAction Action { get; private set; } = WorkflowAction.Inconnu;
+        public string Message { get; } = string.Empty;
+        public WorkflowType Type { get; } = WorkflowType.Inconnu;
+        public WorkflowAction Action { get; } = WorkflowAction.Inconnu;
         
-        // Props Assignation
+        // A qui est assigné le wf
         public WorkflowAssignation Assignation { get; private set; }
         
-        // Props Terminaison
+        // Qui a validé, terminé le wf
         public AuditInfo? Terminaison { get; private set; }
 
-        public AuditInfo Creation { get; private set; }
+        // Qui a créé et envoyé le wf
+        public AuditInfo Expediteur { get; }
         // ------------------------------------------------------------
 
 
@@ -48,7 +49,7 @@ namespace FDL.WF.Domain
         private Workflow(ReferenceDossier refDossier, AuditInfo expediteur , WorkflowAssignation assignation, string message, WorkflowType type, WorkflowAction action)
         {
             RefDossier = refDossier;
-            Creation = expediteur;
+            Expediteur = expediteur;
             Assignation = assignation;
             Message = message;
             Type = type;

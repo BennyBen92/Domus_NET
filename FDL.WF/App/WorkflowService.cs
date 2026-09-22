@@ -14,6 +14,7 @@ namespace FDL.WF.App
         private readonly TimeProvider _timeProvider = timeProvider;
         // ------------------------------------------------------------
 
+        // Utilisateur qui agit
         private AuditInfo FaitPar() => new(_utilisateurCourant.Id, _timeProvider.GetUtcNow().UtcDateTime);
         // ------------------------------------------------------------
 
@@ -27,7 +28,7 @@ namespace FDL.WF.App
         /// <param name="message"></param>
         /// <param name="idDocument"></param>
         /// <returns name="idWorkflow"></returns>
-        public int CreerWorkflowDocument(ReferenceDossier refDossier, WorkflowAssignation assignation, string message, WorkflowAction action, int idDocument)
+        public int CreerPourDocument(ReferenceDossier refDossier, WorkflowAssignation assignation, string message, WorkflowAction action, int idDocument)
         {
             var workflow = Workflow.PourDocument(refDossier, FaitPar(), assignation, message, action, idDocument);
             return _workflowRepository.Add(workflow);
@@ -40,7 +41,7 @@ namespace FDL.WF.App
         /// <param name="assignation"></param>
         /// <param name="message"></param>
         /// <returns name="idWorkflow"></returns>
-        public int CreerWorkflowNote(ReferenceDossier refDossier, WorkflowAssignation assignation, string message)
+        public int CreerPourNote(ReferenceDossier refDossier, WorkflowAssignation assignation, string message)
         {
             var workflow = Workflow.PourNote(refDossier, FaitPar(), assignation, message);
             return _workflowRepository.Add(workflow);
@@ -53,7 +54,7 @@ namespace FDL.WF.App
         /// <param name="assignation"></param>
         /// <param name="message"></param>
         /// <returns name="idWorkflow"></returns>
-        public int CreerWorkflowTache(ReferenceDossier refDossier, WorkflowAssignation assignation, string message)
+        public int CreerPourTache(ReferenceDossier refDossier, WorkflowAssignation assignation, string message)
         {
             var workflow = Workflow.PourTache(refDossier, FaitPar(), assignation, message);
             return _workflowRepository.Add(workflow);
@@ -68,14 +69,44 @@ namespace FDL.WF.App
         {
             return _workflowRepository.Search(new WorkflowFiltre(
                 IdUserAssigne: _utilisateurCourant.Id,
-                IdGroupAssigne: null,
+                IdGroupesAssignes: null,
                 EstTermine: false));
+        }
+
+        /// <summary>
+        /// Récupère la liste des workflows en cours de mes groupes
+        /// </summary>
+        /// <returns></returns>
+        public IReadOnlyList<Workflow> WorkflowsDeMesGroupes()
+        {
+            return _workflowRepository.Search(new WorkflowFiltre(
+                IdUserAssigne: null,
+                IdGroupesAssignes: _utilisateurCourant.IdGroupes,
+                EstTermine: false));
+        }
+        // ------------------------------------------------------------
+
+
+        /// <summary>
+        /// Réassigne un workflow a un autre utilisateur
+        /// </summary>
+        /// <param name="idWorkflow"></param>
+        /// <param name="assignation"></param>
+        /// <exception cref="InvalidOperationException"></exception>
+        public void Reassigner(int idWorkflow, WorkflowAssignation nouvelleAssignation)
+        {
+            Workflow? wf = _workflowRepository.GetById(idWorkflow)
+                ?? throw new InvalidOperationException($"Le workflow avec l'ID {idWorkflow} n'existe pas.");
+
+            wf.Reassigner(nouvelleAssignation);
+            _workflowRepository.Update(wf);
         }
 
         /// <summary>
         /// Termine un workflow en cours
         /// </summary>
         /// <param name="idWorkflow"></param>
+        /// <exception cref="InvalidOperationException"></exception>
         public void Terminer(int idWorkflow)
         {
             Workflow? wf = _workflowRepository.GetById(idWorkflow)
@@ -84,5 +115,6 @@ namespace FDL.WF.App
             wf.Terminer(FaitPar());
             _workflowRepository.Update(wf);
         }
+
     }
 }
