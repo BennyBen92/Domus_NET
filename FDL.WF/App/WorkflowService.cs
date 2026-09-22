@@ -67,8 +67,8 @@ namespace FDL.WF.App
         public IReadOnlyList<Workflow> MesWorkflowsEnCours()
         {
             return _workflowRepository.Search(new WorkflowFiltre(
-                IdUser: _utilisateurCourant.Id,
-                IdGroup: null,
+                IdUserAssigne: _utilisateurCourant.Id,
+                IdGroupAssigne: null,
                 EstTermine: false));
         }
 
