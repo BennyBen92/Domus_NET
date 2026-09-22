@@ -22,12 +22,6 @@ namespace FDL.WF.App
         /// <summary>
         /// Crée un workflow pour un document
         /// </summary>
-        /// <param name="refDossier"></param>
-        /// <param name="action"></param>
-        /// <param name="assignation"></param>
-        /// <param name="message"></param>
-        /// <param name="idDocument"></param>
-        /// <returns name="idWorkflow"></returns>
         public int CreerPourDocument(ReferenceDossier refDossier, WorkflowAssignation assignation, string message, WorkflowAction action, int idDocument)
         {
             var workflow = Workflow.PourDocument(refDossier, FaitPar(), assignation, message, action, idDocument);
@@ -37,10 +31,6 @@ namespace FDL.WF.App
         /// <summary>
         /// Crée un workflow pour une note  
         /// </summary>
-        /// <param name="refDossier"></param>
-        /// <param name="assignation"></param>
-        /// <param name="message"></param>
-        /// <returns name="idWorkflow"></returns>
         public int CreerPourNote(ReferenceDossier refDossier, WorkflowAssignation assignation, string message)
         {
             var workflow = Workflow.PourNote(refDossier, FaitPar(), assignation, message);
@@ -50,9 +40,6 @@ namespace FDL.WF.App
         /// <summary>
         /// Crée un workflow pour une tache
         /// </summary>
-        /// <param name="refDossier"></param>
-        /// <param name="assignation"></param>
-        /// <param name="message"></param>
         public int CreerPourTache(ReferenceDossier refDossier, WorkflowAssignation assignation, string message)
         {
             var workflow = Workflow.PourTache(refDossier, FaitPar(), assignation, message);
@@ -88,9 +75,6 @@ namespace FDL.WF.App
         /// <summary>
         /// Réassigne un workflow a un autre utilisateur
         /// </summary>
-        /// <param name="idWorkflow"></param>
-        /// <param name="assignation"></param>
-        /// <exception cref="InvalidOperationException"></exception>
         public void Reassigner(int idWorkflow, WorkflowAssignation nouvelleAssignation)
         {
             Workflow? wf = _workflowRepository.GetById(idWorkflow)
@@ -103,8 +87,6 @@ namespace FDL.WF.App
         /// <summary>
         /// Termine un workflow en cours
         /// </summary>
-        /// <param name="idWorkflow"></param>
-        /// <exception cref="InvalidOperationException"></exception>
         public void Terminer(int idWorkflow)
         {
             Workflow? wf = _workflowRepository.GetById(idWorkflow)

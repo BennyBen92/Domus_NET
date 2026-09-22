@@ -43,7 +43,7 @@ namespace FDL.WF.Domain
         // ------------------------------------------------------------
 
 
-        // Constructeur par défaut
+        // Constructeur
         private Workflow(ReferenceDossier refDossier, AuditInfo expediteur, WorkflowAssignation assignation, string message, WorkflowType type, WorkflowAction action)
         {
             RefDossier = refDossier;
@@ -74,11 +74,6 @@ namespace FDL.WF.Domain
         /// <summary>
         /// Crée un workflow de type Note avec l'action ALire.
         /// </summary>
-        /// <param name="refDossier"></param>
-        /// <param name="expediteur"></param>
-        /// <param name="assignation"></param>
-        /// <param name="message"></param>
-        /// <returns></returns>
         public static Workflow PourNote(ReferenceDossier refDossier, AuditInfo expediteur, WorkflowAssignation assignation, string message)
         {
             return new Workflow(refDossier, expediteur, assignation, message, WorkflowType.Note, WorkflowAction.ALire);
@@ -87,13 +82,6 @@ namespace FDL.WF.Domain
         /// <summary>
         /// Crée un workflow de type Document avec l'action spécifiée et l'identifiant du document.
         /// </summary>
-        /// <param name="refDossier"></param>
-        /// <param name="expediteur"></param>
-        /// <param name="assignation"></param>
-        /// <param name="message"></param>
-        /// <param name="action"></param>
-        /// <param name="idDocument"></param>
-        /// <returns></returns>
         public static Workflow PourDocument(ReferenceDossier refDossier, AuditInfo expediteur, WorkflowAssignation assignation, string message, WorkflowAction action, int idDocument)
         {
             ArgumentOutOfRangeException.ThrowIfNegativeOrZero(idDocument, nameof(idDocument));
@@ -103,11 +91,6 @@ namespace FDL.WF.Domain
         /// <summary>
         /// Crée un workflow de type Tache avec l'action AValider.
         /// </summary>
-        /// <param name="refDossier"></param>
-        /// <param name="expediteur"></param>
-        /// <param name="assignation"></param>
-        /// <param name="message"></param>
-        /// <returns></returns>
         public static Workflow PourTache(ReferenceDossier refDossier, AuditInfo expediteur, WorkflowAssignation assignation, string message)
         {
             return new Workflow(refDossier, expediteur, assignation, message, WorkflowType.Tache, WorkflowAction.AValider);
@@ -125,7 +108,6 @@ namespace FDL.WF.Domain
         /// <summary>
         /// Réassigne le workflow à une nouvelle assignation.
         /// </summary>
-        /// <param name="nouvelleAssignation">La nouvelle assignation.</param>
         public void Reassigner(WorkflowAssignation nouvelleAssignation)
         {
             if (EstTermine)

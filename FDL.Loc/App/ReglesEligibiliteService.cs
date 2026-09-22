@@ -9,7 +9,6 @@ namespace FDL.Loc.App
         /// <summary>
         /// Évalue l'éligibilité d'un ménage en fonction de son revenu total et du plafond par personne.
         /// </summary>
-        /// <param name="menage"></param>
         public EligibiliteResult Evaluer(Menage menage)
         {
             var plafond = _plafondParPersonne * menage.NombrePersonnes;
