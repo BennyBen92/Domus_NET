@@ -16,7 +16,9 @@
         public int? IdUserTerminaison { get; set; }
         public DateTime? DateTerminaison { get; set; }
         public int IdDocument { get; set; }
-        public int IdUserUpdate { get; set; }
-        public DateTime DateUpdate { get; set; }
+        
+        // Audit Update en nullable, car il n'est géré qu'en base
+        public int? IdUserUpdate { get; set; }
+        public DateTime? DateUpdate { get; set; }
     }
 }
