@@ -9,7 +9,7 @@ namespace FDL.WF.App
         public int CreerPourNote(ReferenceDossier refDossier, WorkflowAssignation assignation, string message);
         public int CreerPourTache(ReferenceDossier refDossier, WorkflowAssignation assignation, string message);
 
-        public void Reassigner(int idWorkflow, WorkflowAssignation assignation);
+        public void Reassigner(int idWorkflow, WorkflowAssignation nouvelleAssignation);
         public void Terminer(int idWorkflow);
 
         public IReadOnlyList<Workflow> MesWorkflowsEnCours();
