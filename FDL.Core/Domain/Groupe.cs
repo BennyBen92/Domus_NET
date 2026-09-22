@@ -9,7 +9,7 @@
         public Groupe(int id, string nom)
         {
             ArgumentOutOfRangeException.ThrowIfNegativeOrZero(id, nameof(id));
-            ArgumentException.ThrowIfNullOrWhiteSpace(Nom,nameof(Nom));
+            ArgumentException.ThrowIfNullOrWhiteSpace(nom,nameof(nom));
             Id = id;
             Nom = nom;
         }
