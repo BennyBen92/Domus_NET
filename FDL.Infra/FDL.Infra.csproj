@@ -11,4 +11,8 @@
     <ProjectReference Include="..\FDL.WF\FDL.WF.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="FDL.Infra.Tests" />
+  </ItemGroup>
+
 </Project>

@@ -93,7 +93,7 @@ namespace FDL.WF.Tests
         {
             // Arrange : l'utilisateur 1 crée un wf note pour le 42 et un autre pour le 43
             int idWF42 = _service.CreerPourNote(Dossier, WorkflowAssignation.PourUtilisateur(42), "A lire");
-            int idWF43 = _service.CreerPourNote(Dossier, WorkflowAssignation.PourUtilisateur(43), "A lire");
+            _service.CreerPourNote(Dossier, WorkflowAssignation.PourUtilisateur(43), "A lire");
             _utilisateur.ChangerUtilisateur(42, [10]);
 
             // Act
@@ -155,10 +155,10 @@ namespace FDL.WF.Tests
         }
 
         [Fact]
-        public void WorkflowsDeMesGroupes_UtilisateurSansGroupe_RenvoiVide()
+        public void WorkflowsDeMesGroupes_UtilisateurSansGroupe_RenvoieVide()
         {
             // Arrange : l'utilisateur 1 crée un wf note pour le groupe 10
-            int id = _service.CreerPourNote(Dossier, WorkflowAssignation.PourGroupe(10), "A lire");
+            _service.CreerPourNote(Dossier, WorkflowAssignation.PourGroupe(10), "A lire");
             _utilisateur.ChangerUtilisateur(43, []);
 
             // Act

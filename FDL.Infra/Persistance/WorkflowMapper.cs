@@ -19,7 +19,7 @@ namespace FDL.Infra.Persistance
                 type: (WorkflowType)r.Type,
                 action: (WorkflowAction)r.Action,
                 idDocument: r.IdDocument,
-                terminaison: r is { IdUserTerminaison: int u, DateTerminaison: DateTime d } ? new AuditInfo(u, d) : null
+                terminaison: TerminaisonFrom(r)
               );
             }
             catch (Exception e) when (e is ArgumentException or FormatException)
@@ -28,13 +28,20 @@ namespace FDL.Infra.Persistance
             }
         }
 
-        // Crée une Assignation depuis r
+        // Crée une Assignation depuis r. L'utilisateur est prioritaire sur le groupe.
         private static WorkflowAssignation AssignationFrom(WorkflowRow r) => r switch
         {
             { IdUserAssigne: int u } => WorkflowAssignation.PourUtilisateur(u),
             { IdGroupeAssigne: int g } => WorkflowAssignation.PourGroupe(g),
             _ => throw new InvalidDataException($"Workflow {r.IdWorkflow} : aucune assignation en base.")
         };
+
+        // Crée la Terminaison depuis r.
+        // Règle : le workflow est terminé dès que IdUserTerminaison est renseigné.
+        // Date manquante : DateUpdate, sinon DateExpedition. Une date sans utilisateur est ignorée.
+        private static AuditInfo? TerminaisonFrom(WorkflowRow r) => r.IdUserTerminaison is int u
+            ? new AuditInfo(u, r.DateTerminaison ?? r.DateUpdate ?? r.DateExpedition)
+            : null;
         // ------------------------------------------------------------
 
         // Vers le Repo
