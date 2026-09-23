@@ -7,9 +7,9 @@ namespace FDL.Core.Tests
         private readonly ITestOutputHelper _output = output;
 
         [Fact]
-        public void Creation_AvecSequence0_EstRefusee()
+        public void Creation_AvecSequenceNegative_EstRefusee()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => ReferenceDossier.DepuisExistant(1_500_123, 0));
+            Assert.Throws<ArgumentOutOfRangeException>(() => ReferenceDossier.DepuisExistant(1_500_123, -1));
         }
         [Fact]
         public void DepuisExistant_AvecSequence0_EstUneDemandeHeritee()
