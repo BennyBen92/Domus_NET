@@ -65,19 +65,6 @@ métier porte le même nom dans la conversation, dans la documentation et dans l
 En cas de doute : si le terme apparaîtrait tel quel dans une réunion avec un gestionnaire, il
 s'écrit en français ; s'il ne parle qu'au développeur, il s'écrit en anglais.
 
-### Deux règles complémentaires
-
-**Pas d'accent dans un identifiant.** C# les accepte (`Réassigner` compile), mais aucune API .NET
-n'en utilise, et ils se propagent mal dès qu'un outil externe manipule les noms de membres
-(sérialiseurs, ORM, générateurs de code). Les accents restent dans les chaînes de caractères et la
-documentation : `Reassigner`, jamais `Réassigner`.
-
-**Un retour `bool` impose le préfixe `Try`.** Convention .NET (`int.TryParse`,
-`Dictionary.TryGetValue`) : une méthode `Try…` renvoie `false` pour un cas d'échec *attendu*, tandis
-qu'une méthode sans ce préfixe lève une exception quand l'opération est impossible. Un `bool`
-renvoyé sans le préfixe crée un code retour silencieux, que l'appelant oublie de tester —
-`wf.Terminer(id);` compile sans avertissement et masque la violation.
-
 ### Documentation du code
 
 Commentaires au format XML de C# (`/// <summary>`).
