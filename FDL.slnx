@@ -1,6 +1,7 @@
 <Solution>
   <Folder Name="/Éléments de solution/">
     <File Path="global.json" />
+    <File Path="README.md" />
   </Folder>
   <Project Path="FDL.Core/FDL.Core.csproj" Id="fe44a411-40a0-4ecd-89a5-aeec72b45d75" />
   <Project Path="FDL.WF/FDL.WF.csproj" Id="d400a758-b6f1-4c7b-9d10-dd90359146e2" />
