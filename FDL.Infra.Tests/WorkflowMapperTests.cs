@@ -32,26 +32,14 @@ namespace FDL.Infra.Tests
 
         // --- Aller-retour Domain -> Row -> Domain -------------------
 
-        public static TheoryData<Workflow> WorkflowsTypes => new()
-        {
-            // Note en cours, assignée à un utilisateur
-            Workflow.Reconstituer(10, Dossier, new AuditInfo(1, T0), WorkflowAssignation.PourUtilisateur(42),
-                "Note", WorkflowType.Note, WorkflowAction.ALire, 0, null),
-
-            // Document terminé, assigné à un groupe, dossier en notation héritée (séquence 0)
-            Workflow.Reconstituer(11, ReferenceDossier.DepuisExistant(1500123, 0), new AuditInfo(1, T0),
-                WorkflowAssignation.PourGroupe(10), "Document", WorkflowType.Document, WorkflowAction.ASigner, 502,
-                new AuditInfo(42, T0.AddHours(3))),
-
-            // Tâche en cours, assignée à un groupe
-            Workflow.Reconstituer(12, Dossier, new AuditInfo(1, T0), WorkflowAssignation.PourGroupe(20),
-                "Tâche", WorkflowType.Tache, WorkflowAction.AValider, 0, null),
-        };
-
         [Theory]
-        [MemberData(nameof(WorkflowsTypes))]
-        public void AllerRetour_DomainVersRowVersDomain_ConserveToutesLesDonnees(Workflow attendu)
+        [InlineData("NoteUtilisateurEnCours")]
+        [InlineData("DocumentGroupeTermine")]
+        [InlineData("TacheGroupeEnCours")]
+        public void AllerRetour_DomainVersRowVersDomain_ConserveToutesLesDonnees(string cas)
         {
+            Workflow attendu = WorkflowDeTest(cas);
+
             Workflow obtenu = WorkflowMapper.ToDomain(WorkflowMapper.ToRow(attendu));
 
             Assert.Equal(attendu.IdWorkflow, obtenu.IdWorkflow);
@@ -64,6 +52,22 @@ namespace FDL.Infra.Tests
             Assert.Equal(attendu.IdDocument, obtenu.IdDocument);
             Assert.Equal(attendu.Terminaison, obtenu.Terminaison);
         }
+
+        private static Workflow WorkflowDeTest(string cas) => cas switch
+        {
+            "NoteUtilisateurEnCours" => Workflow.Reconstituer(10, Dossier, new AuditInfo(1, T0),
+                WorkflowAssignation.PourUtilisateur(42), "Note", WorkflowType.Note, WorkflowAction.ALire, 0, null),
+
+            // Dossier en notation héritée (séquence 0)
+            "DocumentGroupeTermine" => Workflow.Reconstituer(11, ReferenceDossier.DepuisExistant(1500123, 0),
+                new AuditInfo(1, T0), WorkflowAssignation.PourGroupe(10), "Document", WorkflowType.Document,
+                WorkflowAction.ASigner, 502, new AuditInfo(42, T0.AddHours(3))),
+
+            "TacheGroupeEnCours" => Workflow.Reconstituer(12, Dossier, new AuditInfo(1, T0),
+                WorkflowAssignation.PourGroupe(20), "Tâche", WorkflowType.Tache, WorkflowAction.AValider, 0, null),
+
+            _ => throw new ArgumentException($"Cas inconnu : {cas}", nameof(cas))
+        };
         // ------------------------------------------------------------
 
 
