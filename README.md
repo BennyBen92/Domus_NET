@@ -1,5 +1,7 @@
 # Domus_NET
 
+[![CI](https://github.com/BennyBen92/Domus_NET/actions/workflows/ci.yml/badge.svg)](https://github.com/BennyBen92/Domus_NET/actions/workflows/ci.yml)
+
 Démonstrateur d'architecture .NET 10 : portage d'un ERP de gestion immobilière vers une Clean Architecture testable.
 
 ## Structure de la solution
