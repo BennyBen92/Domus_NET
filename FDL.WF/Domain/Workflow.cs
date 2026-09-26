@@ -116,6 +116,9 @@ namespace FDL.WF.Domain
         }
         // ------------------------------------------------------------
 
+        /// <summary>
+        /// Reconstitue un Workflow depuis les données persistées
+        /// </summary>
         public static Workflow Reconstituer(int idWorkflow, ReferenceDossier refDossier, AuditInfo expediteur, WorkflowAssignation assignation, string message, WorkflowType type, WorkflowAction action, int idDocument, AuditInfo? terminaison)
         {
             ArgumentOutOfRangeException.ThrowIfNegativeOrZero(idWorkflow, nameof(idWorkflow));
