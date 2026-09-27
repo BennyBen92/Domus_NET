@@ -18,7 +18,8 @@ namespace FDL.Infra.Persistance
 
         public IEnumerable<Workflow> GetAll()
         {
-            return db.Workflows.AsNoTracking()
+            return db.Workflows
+                .AsNoTracking()
                 .AsEnumerable()                     // SQL exécuté ici
                 .Select(WorkflowMapper.ToDomain)    // mapping mémoire
                 .ToList();
