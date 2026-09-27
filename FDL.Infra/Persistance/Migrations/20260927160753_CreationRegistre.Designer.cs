@@ -3,6 +3,7 @@ using System;
 using FDL.Infra.Persistance;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FDL.Infra.Persistance.Migrations
 {
     [DbContext(typeof(DomusDbContext))]
-    partial class DomusDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260927160753_CreationRegistre")]
+    partial class CreationRegistre
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -88,8 +91,7 @@ namespace FDL.Infra.Persistance.Migrations
                         .HasName("pk_registre");
 
                     b.HasIndex("ReferenceDossier")
-                        .IsUnique()
-                        .HasDatabaseName("ux_registre_reference_dossier");
+                        .HasDatabaseName("ix_registre_reference_dossier");
 
                     b.ToTable("registre", (string)null);
                 });
