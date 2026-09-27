@@ -3,7 +3,7 @@ using FDL.Loc.Domain;
 
 namespace FDL.Infra.Persistance
 {
-    internal sealed class RegistreMapper
+    internal static class RegistreMapper
     {
         // Vers le Domain
         public static Registre ToDomain(RegistreRow r)
