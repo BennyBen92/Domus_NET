@@ -19,7 +19,7 @@ namespace FDL.Loc.Domain
     // ------------------------------------------------------------
 
     // Un Registre est une demande d'aide locative.
-    public class Registre
+    public sealed class Registre
     {
         // Constantes
         public const int NombreChambresMaximumAutorise = 6;
