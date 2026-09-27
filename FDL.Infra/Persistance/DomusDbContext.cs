@@ -6,6 +6,8 @@ namespace FDL.Infra.Persistance
     {
         public DbSet<WorkflowRow> Workflows => Set<WorkflowRow>();
 
+        public DbSet<RegistreRow> Registres => Set<RegistreRow>();
+
         // ApplyConfigurationsFromAssembly charge automatiquement toutes les classes de configuration du projet
         protected override void OnModelCreating(ModelBuilder modelBuilder) =>
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(DomusDbContext).Assembly);
