@@ -12,7 +12,7 @@ namespace FDL.Infra.Persistance
             {
                 return Workflow.Reconstituer(
                 idWorkflow: r.IdWorkflow,
-                refDossier: ReferenceDossier.DepuisExistant(r.NumeroDossier, r.Sequence),
+                refDossier: ReferenceDossierCodec.FromInt(r.ReferenceDossier),
                 expediteur: new AuditInfo(r.IdUserExpediteur, r.DateExpedition),
                 assignation: AssignationFrom(r),
                 message: r.Message,
@@ -48,8 +48,7 @@ namespace FDL.Infra.Persistance
         public static WorkflowRow ToRow(Workflow wf) => new()
         {
             IdWorkflow = wf.IdWorkflow,
-            NumeroDossier = wf.ReferenceDossier.NumeroDossier,
-            Sequence = wf.ReferenceDossier.Sequence,
+            ReferenceDossier = ReferenceDossierCodec.ToInt(wf.ReferenceDossier),
             Type = (int)wf.Type,
             Action = (int)wf.Action,
             Message = wf.Message,

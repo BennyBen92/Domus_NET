@@ -70,6 +70,10 @@ namespace FDL.Infra.Persistance
                 db.Workflows.Update(WorkflowMapper.ToRow(entity));
                 db.SaveChanges();
             }
+            catch(DbUpdateConcurrencyException e)
+            {
+                throw new InvalidOperationException($"Le workflow {entity.IdWorkflow} n'existe pas.", e);
+            }
             finally
             {
                 db.ChangeTracker.Clear();

@@ -14,8 +14,7 @@ namespace FDL.Infra.Tests
         private static WorkflowRow RowValide() => new()
         {
             IdWorkflow = 10,
-            NumeroDossier = 1500123,
-            Sequence = 1,
+            ReferenceDossier = 150012301,
             Type = (int)WorkflowType.Note,
             Action = (int)WorkflowAction.ALire,
             Message = "Message test",
@@ -181,8 +180,7 @@ namespace FDL.Infra.Tests
 
         [Theory]
         [InlineData("IdWorkflow")]
-        [InlineData("NumeroDossier")]
-        [InlineData("Sequence")]
+        [InlineData("ReferenceDossierZero")]
         [InlineData("IdUserExpediteur")]
         [InlineData("DateExpedition")]
         [InlineData("IdUserAssigne")]
@@ -202,7 +200,7 @@ namespace FDL.Infra.Tests
         public void ToDomain_DonneeCorrompue_ConserveLExceptionDOrigine()
         {
             WorkflowRow row = RowValide();
-            row.NumeroDossier = 0;
+            row.ReferenceDossier = 0;
 
             var ex = Assert.Throws<InvalidDataException>(() => WorkflowMapper.ToDomain(row));
 
@@ -215,8 +213,7 @@ namespace FDL.Infra.Tests
             switch (champ)
             {
                 case "IdWorkflow": row.IdWorkflow = 0; break;
-                case "NumeroDossier": row.NumeroDossier = 0; break;
-                case "Sequence": row.Sequence = 100; break;
+                case "ReferenceDossierZero": row.ReferenceDossier = 0; break;
                 case "IdUserExpediteur": row.IdUserExpediteur = 0; break;
                 case "DateExpedition": row.DateExpedition = default; break;
                 case "IdUserAssigne": row.IdUserAssigne = 0; break;
