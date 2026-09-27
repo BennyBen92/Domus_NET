@@ -53,6 +53,8 @@ namespace FDL.Loc.Domain
             // Vérifie que la référence de dossier est celle d'une demande
             if (!referenceDossier.EstDemande)
                 throw new ArgumentException("Le registre doit être créé à partir d'une référence de demande.");
+            if (dateStatut == default)
+                throw new ArgumentException("La date du statut est obligatoire.", nameof(dateStatut));
 
             ListeCommunesValide(listeCommunes);
             NombresChambresSouhaitesValides(nbChambresMin: nbChambresMin, nbChambresMax: nbChambresMax);
