@@ -3,8 +3,7 @@
     internal sealed class WorkflowRow
     {
         public int IdWorkflow { get; set; }
-        public int NumeroDossier { get; set; }
-        public int Sequence { get; set; }
+        public int ReferenceDossier { get; set; }
         public int Type { get; set; }
         public int Action { get; set; }
         public string Message { get; set; } = "";
