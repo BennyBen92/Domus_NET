@@ -16,9 +16,11 @@ namespace FDL.Infra.Persistance
 
             // -- Règles --
             //...
-
+            
             // -- Index --
-            builder.HasIndex(r => r.ReferenceDossier);
+            builder.HasIndex(r => r.ReferenceDossier)
+                .IsUnique()
+                .HasDatabaseName("ux_registre_reference_dossier");
 
         }
     }
