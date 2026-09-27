@@ -180,13 +180,14 @@ namespace FDL.Loc.Tests
             RegistreStatut statut = RegistreStatut.EnCours,
             int nbChambresMin = 0,
             int nbChambresMax = 0,
-            bool souhaiteAscenseur = false
+            bool souhaiteAscenseur = false,
+            DateTime? dateStatut = null
             ) => Registre.Reconstituer(
                 idRegistre: id,
                 referenceDossier: _referenceDemande,
                 type: type,
                 statut: statut,
-                dateStatut: _dateTime,
+                dateStatut: dateStatut ?? _dateTime,
                 nbChambresMin: nbChambresMin,
                 nbChambresMax: nbChambresMax,
                 listeCommunes: _listeCommunes,
@@ -234,6 +235,15 @@ namespace FDL.Loc.Tests
             Assert.Throws<InvalidDataException>(() =>
                 Reconstituer(type: type, statut: statut)
             );
+        }
+
+        [Fact]
+        public void Reconstitution_DateStatutParDefaut_LeveArgumentException()
+        {
+            var ex = Assert.Throws<ArgumentException>(() =>
+                Reconstituer(dateStatut: default(DateTime))
+            );
+            Assert.Equal("dateStatut", ex.ParamName);
         }
         // ------------------------------------------------------------
 
