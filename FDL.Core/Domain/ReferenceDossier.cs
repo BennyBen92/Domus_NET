@@ -63,7 +63,7 @@ namespace FDL.Core.Domain
             if (!int.TryParse(parts[1], out var sequence))
                 throw new FormatException("Sequence must be an integer");
 
-            return new ReferenceDossier(numeroDossier, sequence);
+            return DepuisExistant(numeroDossier, sequence);
         }
 
         /// <summary>
