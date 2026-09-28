@@ -21,6 +21,7 @@ namespace FDL.Loc.Tests
         private readonly WorkflowRepositoryEnMemoire _workflowRepo = new();
         private readonly FakeTimeProvider _horloge = new(Maintenant);
         private readonly UtilisateurCourantEnMemoire _utilisateur = new();
+        private readonly UnitOfWorkEnMemoire _unitOfWork = new();
         private readonly RegistreService _registreService;
         private readonly WorkflowService _workflowService;
 
@@ -30,7 +31,7 @@ namespace FDL.Loc.Tests
         {
             _registreService = new(_registreRepo, _utilisateur, _horloge);
             _workflowService = new(_workflowRepo, _utilisateur, _horloge);
-            _inscriptionService = new(_registreService, _workflowService);
+            _inscriptionService = new(_registreService, _workflowService, _unitOfWork);
         }
 
         // Appel standard : seuls les paramètres testés varient
@@ -74,6 +75,10 @@ namespace FDL.Loc.Tests
             Assert.Equal(attendu, w.Expediteur);
             Assert.False(w.EstTermine);
             Assert.Contains("2.060.123/61", w.Message);
+
+            // Les deux créations passent par une seule unité de travail, validée
+            Assert.Equal(1, _unitOfWork.NbExecutions);
+            Assert.True(_unitOfWork.EstValidee);
         }
 
         [Fact]
@@ -137,19 +142,23 @@ namespace FDL.Loc.Tests
 
 
         /// <summary>
-        /// Documente une limite connue : les deux créations ne sont pas dans une même transaction.
-        /// Si le workflow échoue, le registre reste en base. Solution : Unit of Work / transaction partagée.
+        /// Si le workflow échoue, l'échec a lieu DANS l'unité de travail : elle est annulée,
+        /// donc le registre créé juste avant est annulé aussi (rollback de la transaction).
+        /// Le faux Unit of Work ne sait pas annuler les dépôts en mémoire : il vérifie seulement
+        /// que les deux créations sont bien dans la même unité de travail.
         /// </summary>
         [Fact]
-        public void InscriptionPourLogement_EchecDuWorkflow_LeRegistreResteCree_LimiteNonAtomique()
+        public void InscriptionPourLogement_EchecDuWorkflow_UniteDeTravailAnnulee()
         {
             var workflowService = new WorkflowService(new WorkflowRepositoryEnEchec(), _utilisateur, _horloge);
-            var service = new InscriptionService(_registreService, workflowService);
+            var service = new InscriptionService(_registreService, workflowService, _unitOfWork);
 
             Assert.Throws<InvalidOperationException>(() => service.InscriptionPourLogement(
                 RefDemande, 1, 2, Communes, true, null));
 
-            Assert.Single(_registreRepo.GetAll());
+            Assert.Equal(1, _unitOfWork.NbExecutions);
+            Assert.True(_unitOfWork.EstAnnulee);
+            Assert.False(_unitOfWork.EstValidee);
         }
 
         // Repository qui simule une panne à l'écriture
