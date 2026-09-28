@@ -15,7 +15,7 @@ namespace FDL.Loc.App
                                                                         int[] listeCommunes, bool souhaiteAscenseur,
                                                                         string? messageDuCandidat)
         {
-            string commentaire = string.IsNullOrWhiteSpace(messageDuCandidat) ? "" : $"Message du candidat :\n{messageDuCandidat}";
+            string? commentaire = string.IsNullOrWhiteSpace(messageDuCandidat) ? null : $"Message du candidat :\n{messageDuCandidat}";
 
             // On imagine que juste avant, un service de "reference dossier" nous passe la dernière ref. créée.
             // Création du registre "logement"
