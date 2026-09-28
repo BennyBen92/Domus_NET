@@ -35,7 +35,7 @@ namespace FDL.Loc.Tests.Fakes
         /// <summary>
         /// Remplace le registre stocké. Lève une exception si l'identifiant est inconnu.
         /// </summary>
-        public void Update(Registre entity)
+        public void Update(Registre entity, AuditInfo modifiePar)
         {
             ArgumentNullException.ThrowIfNull(entity);
             int index = _table.FindIndex(r => r.IdRegistre == entity.IdRegistre);

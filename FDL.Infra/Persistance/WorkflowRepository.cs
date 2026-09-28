@@ -1,4 +1,5 @@
-﻿using FDL.WF.App;
+﻿using FDL.Core.Domain;
+using FDL.WF.App;
 using FDL.WF.Domain;
 using Microsoft.EntityFrameworkCore;
 
@@ -62,12 +63,16 @@ namespace FDL.Infra.Persistance
             }
         }
 
-        public void Update(Workflow entity)
+        public void Update(Workflow entity, AuditInfo modifierPar)
         {
             ArgumentNullException.ThrowIfNull(entity);
             try
             {
-                db.Workflows.Update(WorkflowMapper.ToRow(entity));
+                WorkflowRow r = WorkflowMapper.ToRow(entity);
+                r.IdUserUpdate = modifierPar.IdUser;
+                r.DateUpdate = modifierPar.Date;
+
+                db.Workflows.Update(r);
                 db.SaveChanges();
             }
             catch(DbUpdateConcurrencyException e)
