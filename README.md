@@ -50,7 +50,7 @@ PostgreSQL 17, EF Core 10 et le provider Npgsql.
 
 Le service dépend des services des deux modules, pas de leurs dépôts : les règles restent à un seul endroit.
 
-**Limite connue, assumée et documentée par un test.** Les deux créations ne sont pas dans une même transaction : si le workflow échoue, le registre reste en base. L'évolution prévue est un *Unit of Work* (transaction partagée sur le `DbContext`).
+**Atomicité par Unit of Work.** Les deux créations s'exécutent dans une seule transaction : `IUnitOfWork` (port dans `FDL.Core`) est implémenté dans `FDL.Infra` par une transaction explicite sur le `DbContext`. Les `SaveChanges` des deux dépôts la rejoignent ; si le workflow échoue, le registre est annulé aussi. Condition : les dépôts et l'unité de travail partagent le même `DbContext` (durée de vie *Scoped*).
 
 ## Tests et intégration continue
 
@@ -61,7 +61,7 @@ dotnet test
 Les tests couvrent chaque couche séparément :
 
 - **Domaine** : invariants des entités. Par exemple, un workflow terminé ne peut être ni réassigné ni terminé une seconde fois, et un registre terminé ou radié ne peut plus être modifié. Les codes postaux doivent être bruxellois et sans doublon, et les données reconstituées sont validées.
-- **Cas d'usage** : `WorkflowService`, `RegistreService` et `InscriptionService` sont testés avec un dépôt en mémoire et un utilisateur courant simulé (dossiers `Fakes`). L'horloge est contrôlée par `FakeTimeProvider`, ce qui rend les dates vérifiables. Le dépôt en mémoire renvoie des copies, comme une vraie base : un oubli de `Update` fait échouer les tests. Pour l'inscription, les tests vérifient aussi qu'une donnée invalide (référence de contrat, communes, chambres) ne crée ni registre ni workflow.
+- **Cas d'usage** : `WorkflowService`, `RegistreService` et `InscriptionService` sont testés avec un dépôt en mémoire et un utilisateur courant simulé (dossiers `Fakes`). L'horloge est contrôlée par `FakeTimeProvider`, ce qui rend les dates vérifiables. Le dépôt en mémoire renvoie des copies, comme une vraie base : un oubli de `Update` fait échouer les tests. Pour l'inscription, les tests vérifient aussi qu'une donnée invalide (référence de contrat, communes, chambres) ne crée ni registre ni workflow, et qu'un échec du workflow annule l'unité de travail.
 - **Infrastructure** : aller-retour entité → ligne → entité, encodage de la référence de dossier, et rejet des lignes corrompues par une `InvalidDataException` explicite.
 
 GitHub Actions compile la solution et exécute les tests à chaque push et à chaque pull request. La branche `main` n'accepte que des pull requests dont la CI est verte.
