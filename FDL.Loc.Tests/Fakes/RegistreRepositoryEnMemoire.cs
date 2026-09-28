@@ -24,8 +24,8 @@ namespace FDL.Loc.Tests.Fakes
         public int Add(Registre entity)
         {
             ArgumentNullException.ThrowIfNull(entity);
-            if (_table.Exists(r => r.RefDossier == entity.RefDossier))
-                throw new InvalidOperationException($"Un registre existe déjà pour le dossier {entity.RefDossier}.");
+            if (_table.Exists(r => r.ReferenceDossier == entity.ReferenceDossier))
+                throw new InvalidOperationException($"Un registre existe déjà pour le dossier {entity.ReferenceDossier}.");
 
             int id = ++_dernierId;
             _table.Add(Copier(entity, id));
@@ -35,7 +35,7 @@ namespace FDL.Loc.Tests.Fakes
         /// <summary>
         /// Remplace le registre stocké. Lève une exception si l'identifiant est inconnu.
         /// </summary>
-        public void Update(Registre entity)
+        public void Update(Registre entity, AuditInfo modifiePar)
         {
             ArgumentNullException.ThrowIfNull(entity);
             int index = _table.FindIndex(r => r.IdRegistre == entity.IdRegistre);
@@ -58,7 +58,7 @@ namespace FDL.Loc.Tests.Fakes
         public Registre? GetByReferenceDossier(ReferenceDossier reference)
         {
             ArgumentNullException.ThrowIfNull(reference);
-            Registre? r = _table.Find(r => r.RefDossier == reference);
+            Registre? r = _table.Find(r => r.ReferenceDossier == reference);
             return r is null ? null : Copier(r, r.IdRegistre);
         }
         // ------------------------------------------------------------
@@ -66,7 +66,7 @@ namespace FDL.Loc.Tests.Fakes
 
         // Simule l'aller-retour en base : nouvelle instance, même état.
         private static Registre Copier(Registre r, int id)
-            => Registre.Reconstituer(id, r.RefDossier, r.Type, r.Statut, r.DateStatut,
+            => Registre.Reconstituer(id, r.ReferenceDossier, r.Type, r.Statut, r.DateStatut,
                 r.NbChambresMinimum, r.NbChambresMaximum, [.. r.ListeCommunes], r.SouhaiteAscenseur,
                 r.Auteur, r.Commentaire);
     }

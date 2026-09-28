@@ -81,7 +81,7 @@ namespace FDL.WF.App
                 ?? throw new InvalidOperationException($"Le workflow avec l'ID {idWorkflow} n'existe pas.");
 
             wf.Reassigner(nouvelleAssignation);
-            _workflowRepository.Update(wf);
+            _workflowRepository.Update(wf, FaitPar());
         }
 
         /// <summary>
@@ -92,8 +92,9 @@ namespace FDL.WF.App
             Workflow? wf = _workflowRepository.GetById(idWorkflow)
                 ?? throw new InvalidOperationException($"Le workflow avec l'ID {idWorkflow} n'existe pas.");
 
-            wf.Terminer(FaitPar());
-            _workflowRepository.Update(wf);
+            AuditInfo faitPar = FaitPar();
+            wf.Terminer(faitPar);
+            _workflowRepository.Update(wf, faitPar);
         }
 
     }

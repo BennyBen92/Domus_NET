@@ -34,7 +34,7 @@ namespace FDL.Infra.Persistance
         public static RegistreRow ToRow(Registre registre) => new()
         {
             IdRegistre = registre.IdRegistre,
-            ReferenceDossier = ReferenceDossierCodec.ToInt(registre.RefDossier),
+            ReferenceDossier = ReferenceDossierCodec.ToInt(registre.ReferenceDossier),
             Type = (int)registre.Type,
             Statut = (int)registre.Statut,
             DateStatut = registre.DateStatut,

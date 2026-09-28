@@ -50,8 +50,8 @@ namespace FDL.Loc.App
             Registre? registre = _registreRepository.GetById(id)
                 ?? throw new InvalidOperationException($"Le registre {id} n'existe pas.");
 
-            registre!.ChangeListeCommunes(liste);
-            _registreRepository.Update(registre);
+            registre.ChangeListeCommunes(liste);
+            _registreRepository.Update(registre, FaitPar());
         }
 
 
@@ -61,16 +61,18 @@ namespace FDL.Loc.App
             Registre? registre = _registreRepository.GetById(id)
                 ?? throw new InvalidOperationException($"Le registre {id} n'existe pas.");
 
-            registre!.Radier(_timeProvider.GetUtcNow().UtcDateTime);
-            _registreRepository.Update(registre);
+            AuditInfo faitPar = FaitPar();
+            registre.Radier(faitPar.Date);
+            _registreRepository.Update(registre, faitPar);
         }
         public void Terminer(int id)
         {
             Registre registre = _registreRepository.GetById(id)
                 ?? throw new InvalidOperationException($"Le registre {id} n'existe pas.");
 
-            registre!.Terminer(_timeProvider.GetUtcNow().UtcDateTime);
-            _registreRepository.Update(registre);
+            AuditInfo faitPar = FaitPar();
+            registre.Terminer(faitPar.Date);
+            _registreRepository.Update(registre, faitPar);
         }
 
         // ------------------------------------------------------------

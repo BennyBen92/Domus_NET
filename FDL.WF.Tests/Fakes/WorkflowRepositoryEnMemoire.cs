@@ -1,3 +1,4 @@
+using FDL.Core.Domain;
 using FDL.WF.App;
 using FDL.WF.Domain;
 
@@ -29,7 +30,7 @@ namespace FDL.WF.Tests.Fakes
         /// <summary>
         /// Remplace le workflow stocké. Lève une exception si l'identifiant est inconnu.
         /// </summary>
-        public void Update(Workflow entity)
+        public void Update(Workflow entity, AuditInfo modifiePar)
         {
             ArgumentNullException.ThrowIfNull(entity);
             int index = _table.FindIndex(w => w.IdWorkflow == entity.IdWorkflow);
