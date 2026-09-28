@@ -13,7 +13,7 @@ namespace FDL.Infra.Persistance
                 transaction.Commit();
                 return resultat;
             }
-            catch (Exception)
+            catch
             {
                 transaction.Rollback();
                 throw;
