@@ -15,7 +15,7 @@ namespace FDL.Infra.Persistance
             }
             catch
             {
-                transaction.Rollback();
+                transaction.Rollback(); // Déjà appelé par Dispose gràce au 'using'
                 throw;
             }
         }
