@@ -61,6 +61,7 @@ namespace FDL.Infra.Persistance
         public void Update(Registre entity, AuditInfo modifiePar)
         {
             ArgumentNullException.ThrowIfNull(entity);
+            ArgumentNullException.ThrowIfNull(modifiePar);
             try
             {
                 RegistreRow r = RegistreMapper.ToRow(entity);

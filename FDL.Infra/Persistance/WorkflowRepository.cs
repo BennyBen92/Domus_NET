@@ -66,6 +66,7 @@ namespace FDL.Infra.Persistance
         public void Update(Workflow entity, AuditInfo modifiePar)
         {
             ArgumentNullException.ThrowIfNull(entity);
+            ArgumentNullException.ThrowIfNull(modifiePar);
             try
             {
                 WorkflowRow r = WorkflowMapper.ToRow(entity);
