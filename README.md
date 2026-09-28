@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/BennyBen92/Domus_NET/actions/workflows/ci.yml/badge.svg)](https://github.com/BennyBen92/Domus_NET/actions/workflows/ci.yml)
 
-Démonstrateur d'architecture .NET 10 : portage d'un ERP de gestion immobilière vers une Clean Architecture testable.
+Démonstration d'architecture .NET 10 : portage d'un ERP de gestion immobilière vers une Clean Architecture testable.
 
 ## Structure de la solution
 
@@ -20,7 +20,7 @@ Chaque module suit le même découpage :
 - `App/` — cas d'usage et *ports* (interfaces de dépôt, objets de filtre). Ne dépend que de `Domain`.
 - L'infrastructure vit dans `FDL.Infra` : elle implémente les ports définis dans `App` et dépend des modules, jamais l'inverse.
 
-```
+```text
 FDL.Infra ──► FDL.Loc ──► FDL.WF ──► FDL.Core
 
 technique     modules (App → Domain)   noyau partagé
@@ -54,7 +54,7 @@ Le service dépend des services des deux modules, pas de leurs dépôts : les r�
 
 ## Tests et intégration continue
 
-```
+```bash
 dotnet test
 ```
 
@@ -70,7 +70,7 @@ GitHub Actions compile la solution et exécute les tests à chaque push et à ch
 
 Le code mêle délibérément français et anglais, selon une règle unique :
 
-> **Le vocabulaire métier reste en français. Le vocabulaire technique reste en anglais.**
+> *Le vocabulaire métier reste en français. Le vocabulaire technique reste en anglais.*
 
 Le métier est écrit, discuté et validé en français. Traduire
 « ménage », « référence de dossier » ou « à signer » romprait la correspondance exacte entre le code
