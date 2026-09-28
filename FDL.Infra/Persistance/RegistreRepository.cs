@@ -50,7 +50,7 @@ namespace FDL.Infra.Persistance
             }
             catch (DbUpdateException e) when (e.InnerException is PostgresException { SqlState: PostgresErrorCodes.UniqueViolation })
             {
-                throw new InvalidOperationException($"Un registre existe déjà pour la référence dossier {entity.RefDossier}.", e);
+                throw new InvalidOperationException($"Un registre existe déjà pour la référence dossier {entity.ReferenceDossier}.", e);
             }
             finally
             {

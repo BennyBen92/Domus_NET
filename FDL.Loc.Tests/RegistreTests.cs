@@ -30,7 +30,7 @@ namespace FDL.Loc.Tests
                 {
                     // Séquence 61 est une demande
                     Registre r = NouveauRegistreLogement(_referenceDemande);
-                    Assert.Equal(_referenceDemande, r.RefDossier);
+                    Assert.Equal(_referenceDemande, r.ReferenceDossier);
                 }
             ));
             Assert.Null(Record.Exception(() =>
@@ -213,7 +213,7 @@ namespace FDL.Loc.Tests
                 commentaire: "Commentaire test"
             );
             Assert.Equal(_auteur, registre.Auteur);
-            Assert.Equal(_referenceDemande, registre.RefDossier);
+            Assert.Equal(_referenceDemande, registre.ReferenceDossier);
             Assert.Equal(_listeCommunes, registre.ListeCommunes);
         }
 

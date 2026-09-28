@@ -45,7 +45,7 @@ namespace FDL.Infra.Tests
             Registre obtenu = RegistreMapper.ToDomain(RegistreMapper.ToRow(attendu));
 
             Assert.Equal(attendu.IdRegistre, obtenu.IdRegistre);
-            Assert.Equal(attendu.RefDossier, obtenu.RefDossier);
+            Assert.Equal(attendu.ReferenceDossier, obtenu.ReferenceDossier);
             Assert.Equal(attendu.Type, obtenu.Type);
             Assert.Equal(attendu.Statut, obtenu.Statut);
             Assert.Equal(attendu.DateStatut, obtenu.DateStatut);
@@ -134,7 +134,7 @@ namespace FDL.Infra.Tests
         {
             Registre registre = RegistreMapper.ToDomain(RowValide());
 
-            Assert.Equal(Dossier, registre.RefDossier);
+            Assert.Equal(Dossier, registre.ReferenceDossier);
             Assert.Equal(new AuditInfo(1, T0), registre.Auteur);
             Assert.Equal(T0.AddDays(1), registre.DateStatut);   // pas la DateCreation
         }

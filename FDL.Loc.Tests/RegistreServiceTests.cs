@@ -61,7 +61,7 @@ namespace FDL.Loc.Tests
             Registre? r = _repo.GetById(id);
             Assert.NotNull(r);
             Assert.Equal(new AuditInfo(7, Maintenant.UtcDateTime), r.Auteur);
-            Assert.Equal(Dossier, r.RefDossier);
+            Assert.Equal(Dossier, r.ReferenceDossier);
             Assert.Equal(RegistreStatut.EnCours, r.Statut);
             Assert.Equal(Maintenant.UtcDateTime, r.DateStatut);
             Assert.Equal(1, r.NbChambresMinimum);

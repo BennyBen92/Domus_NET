@@ -29,7 +29,7 @@ namespace FDL.Loc.Domain
 
         // Props Ids
         public int IdRegistre { get; }
-        public ReferenceDossier RefDossier { get; }
+        public ReferenceDossier ReferenceDossier { get; }
 
         // Qui a créé le Registre
         public AuditInfo Auteur { get; }
@@ -60,7 +60,7 @@ namespace FDL.Loc.Domain
             NombresChambresSouhaitesValides(nbChambresMin: nbChambresMin, nbChambresMax: nbChambresMax);
 
             IdRegistre = idRegistre;
-            RefDossier = referenceDossier;
+            ReferenceDossier = referenceDossier;
             Statut = statut;
             Type = type;
             DateStatut = dateStatut;
