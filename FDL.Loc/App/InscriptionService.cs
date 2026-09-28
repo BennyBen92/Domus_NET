@@ -1,12 +1,14 @@
-﻿using FDL.Core.Domain;
+﻿using FDL.Core.App;
+using FDL.Core.Domain;
 using FDL.WF.App;
 using FDL.WF.Domain;
 
 namespace FDL.Loc.App
 {
     public sealed class InscriptionService(
-        IRegistreService registreService, 
-        IWorkflowService workflowService) : IInscriptionService
+        IRegistreService registreService,
+        IWorkflowService workflowService,
+        IUnitOfWork unitOfWork) : IInscriptionService
     {
         private const int IdGroupeRegistreLocataire = 64;
 
@@ -15,19 +17,24 @@ namespace FDL.Loc.App
                                                                         int[] listeCommunes, bool souhaiteAscenseur,
                                                                         string? messageDuCandidat)
         {
-            string? commentaire = string.IsNullOrWhiteSpace(messageDuCandidat) ? null : $"Message du candidat :\n{messageDuCandidat}";
-
             // On imagine que juste avant, un service de "reference dossier" nous passe la dernière ref. créée.
-            // Création du registre "logement"
-            int idRegistre = registreService.CreerPourLogement(referenceDossier, nbChambresMin, nbChambresMax, listeCommunes, souhaiteAscenseur, commentaire);
-
             // Ensuite, le groupe "registre locataire" en est informé par workflow.
-            WorkflowAssignation assignation = WorkflowAssignation.PourGroupe(IdGroupeRegistreLocataire);
-            
-            string message = string.IsNullOrWhiteSpace(messageDuCandidat) ? "" : $"\n{messageDuCandidat}";
-            int idWorkflow = workflowService.CreerPourTache(referenceDossier, assignation, $"Nouvelle inscription au registre ({referenceDossier}).{message}");
 
-            return (idRegistre, idWorkflow);
+            string? commentaireRegistre = string.IsNullOrWhiteSpace(messageDuCandidat) ? null : $"Message du candidat :\n{messageDuCandidat}";
+
+            WorkflowAssignation assignation = WorkflowAssignation.PourGroupe(IdGroupeRegistreLocataire);
+            string messageWorkflow = string.IsNullOrWhiteSpace(messageDuCandidat) ? "" : $"\n{messageDuCandidat}";
+
+            // Crée une transaction pour s'assurer de la cohérence des données (Configuration du DbContext en Scoped).
+            return unitOfWork.Execute(() =>
+            {
+                // Création du registre "logement"
+                int idRegistre = registreService.CreerPourLogement(referenceDossier, nbChambresMin, nbChambresMax, listeCommunes, souhaiteAscenseur, commentaireRegistre);
+                // Création du workflow
+                int idWorkflow = workflowService.CreerPourTache(referenceDossier, assignation, $"Nouvelle inscription au registre ({referenceDossier}).{messageWorkflow}");
+                return (idRegistre, idWorkflow);
+            });
+
         }
     }
 }
