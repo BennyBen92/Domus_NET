@@ -24,6 +24,7 @@
   <ItemGroup>
     <ProjectReference Include="..\FDL.Core\FDL.Core.csproj" />
     <ProjectReference Include="..\FDL.Loc\FDL.Loc.csproj" />
+    <ProjectReference Include="..\FDL.WF.Tests\FDL.WF.Tests.csproj" />
   </ItemGroup>
 
   <ItemGroup>
