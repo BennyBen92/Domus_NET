@@ -58,14 +58,14 @@ namespace FDL.Infra.Persistance
             }
         }
 
-        public void Update(Registre entity, AuditInfo modifierPar)
+        public void Update(Registre entity, AuditInfo modifiePar)
         {
             ArgumentNullException.ThrowIfNull(entity);
             try
             {
                 RegistreRow r = RegistreMapper.ToRow(entity);
-                r.IdUserUpdate = modifierPar.IdUser;
-                r.DateUpdate = modifierPar.Date;
+                r.IdUserUpdate = modifiePar.IdUser;
+                r.DateUpdate = modifiePar.Date;
 
                 db.Registres.Update(r);
                 db.SaveChanges();

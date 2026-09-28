@@ -63,14 +63,14 @@ namespace FDL.Infra.Persistance
             }
         }
 
-        public void Update(Workflow entity, AuditInfo modifierPar)
+        public void Update(Workflow entity, AuditInfo modifiePar)
         {
             ArgumentNullException.ThrowIfNull(entity);
             try
             {
                 WorkflowRow r = WorkflowMapper.ToRow(entity);
-                r.IdUserUpdate = modifierPar.IdUser;
-                r.DateUpdate = modifierPar.Date;
+                r.IdUserUpdate = modifiePar.IdUser;
+                r.DateUpdate = modifiePar.Date;
 
                 db.Workflows.Update(r);
                 db.SaveChanges();
