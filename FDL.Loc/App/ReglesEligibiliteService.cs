@@ -12,7 +12,7 @@ namespace FDL.Loc.App
         public EligibiliteResult Evaluer(Menage menage)
         {
             var plafond = _plafondParPersonne * menage.NombrePersonnes;
-            var revenu = menage.RevenuTotal();
+            var revenu = menage.RevenuAnnuelTotal();
 
             return revenu <= plafond ?
                 EligibiliteResult.Eligible($"Revenu {revenu:C} <= plafond {plafond:C}") :

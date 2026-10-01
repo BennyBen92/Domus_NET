@@ -1,17 +1,21 @@
 ﻿namespace FDL.Core.Domain
 {
-    public class Menage
+    public sealed class Menage
     {
-        public int NombrePersonnes { get; set; }
-        public List<RevenuAnnuel> Revenus { get; }
+        public IReadOnlyList<PersonnePhysique> Personnes { get; private set; }
+        public IReadOnlyList<RevenuAnnuel> RevenusAnnuel { get; private set; }
 
-        public Menage()
+        public Menage(List<PersonnePhysique> personnes, List<RevenuAnnuel> revenusAnnuel)
         {
-            NombrePersonnes = 0;
-            Revenus = new();
+            Personnes = [.. personnes];
+            RevenusAnnuel = [.. revenusAnnuel];
         }
 
-        public decimal RevenuTotal() => Revenus.Sum(revenu => revenu.Montant);
+
+
+        public int NombrePersonnes => Personnes.Count;
+
+        public decimal RevenuAnnuelTotal() => RevenusAnnuel.Sum(revenu => revenu.Montant);
         
     }
 }
