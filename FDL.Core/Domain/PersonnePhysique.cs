@@ -1,6 +1,4 @@
-﻿using static System.Runtime.InteropServices.JavaScript.JSType;
-
-namespace FDL.Core.Domain
+﻿namespace FDL.Core.Domain
 {
     public enum Sexe
     {
@@ -25,13 +23,16 @@ namespace FDL.Core.Domain
                 throw new ArgumentException("Le nom ne peut pas être vide.", nameof(nom));
 
             if (dateNaissance == default)
-                throw new ArgumentException("La date est obligatoire.", nameof(dateNaissance));
+                throw new ArgumentException("La date de naissance est obligatoire.", nameof(dateNaissance));
 
-            if (dateNaissance > DateOnly.FromDateTime(DateTime.Now))
+            if (dateNaissance > DateOnly.FromDateTime(DateTime.Today))
                 throw new ArgumentException("La date de naissance ne peut pas être dans le futur.", nameof(dateNaissance));
 
             if (string.IsNullOrWhiteSpace(numeroNational))
                 throw new ArgumentException("Le numéro national ne peut pas être vide.", nameof(numeroNational));
+
+            if (!Enum.IsDefined(sexe))
+                throw new InvalidDataException($"Personne physique {idPersonnePhysique} : sexe invalide ({(int)sexe}).");
 
             IdPersonnePhysique = idPersonnePhysique;
             Nom = nom;
@@ -80,9 +81,6 @@ namespace FDL.Core.Domain
             // Validation des paramètres
             if (idPersonnePhysique <= 0)
                 throw new ArgumentException("L'identifiant de la personne physique doit être supérieur à zéro.", nameof(idPersonnePhysique));
-
-            if (!Enum.IsDefined(sexe))
-                throw new InvalidDataException($"Personne physiquue {idPersonnePhysique} : sexe invalid ({(int)sexe}).");
 
             return new(idPersonnePhysique: idPersonnePhysique,
                          nom: nom,
