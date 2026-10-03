@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Runtime.Intrinsics.X86;
 
 namespace FDL.Core.Domain
 {
@@ -75,8 +76,13 @@ namespace FDL.Core.Domain
             result = null;
             erreur = null;
             string chiffres = string.Concat((s ?? "").Where(c => c is not (' ' or '.' or '-')));
+            if (!chiffres.All(char.IsAsciiDigit))
+            {
+                erreur = "Un numéro national est composé uniquement de chiffres.";
+                return false;
+            }
 
-            if (chiffres.Length != 11 || chiffres.All(char.IsAsciiDigit))
+            if (chiffres.Length != 11)
             {
                 erreur = "Un numéro national est composé de 11 chiffres.";
                 return false;
@@ -99,17 +105,6 @@ namespace FDL.Core.Domain
 
         private static bool CleValide(long n, int cc) => cc == 97 - (n % 97);
 
-        private static void RespecteModulo97(string numeroNational)
-        {
-            if (!int.TryParse(numeroNational[..9], out int annees1900) || !int.TryParse(numeroNational[9..11], out int cc))
-                throw new ArgumentException("Echec de la vérification : la chaine ne représente pas un nombre.");
-
-            // Années 1900 ou années 2000
-            long annees2000 = 2_000_000_000L + annees1900; // il faut ajouter un 2 devant
-            if (!CleValide(annees1900, cc) && !CleValide(annees2000, cc))
-                throw new ArgumentException("Le numéro national est invalide : le numéro de contrôle est incorrect.");
-        }
-
         private static string? ErreurDansNumero(int yy, int mm, int dd, int sss, int cc)
         {
             // 00 -> 99
@@ -128,9 +123,14 @@ namespace FDL.Core.Domain
             if (cc is not (>= 0 and <= 99))
                 return $"Le numéro de contrôle doit être compris entre 0 et 99. Or il vaut {cc:00}";
 
-            RespecteModulo97($"{yy:00}{mm:00}{dd:00}{sss:000}{cc:00}");
-
-            return null;
+            return ErreurCle(yy, mm, dd, sss, cc);
+        }
+        private static string? ErreurCle(int yy, int mm, int dd, int sss, int cc)
+        {
+            long b = yy * 10_000_000L + mm * 100_000L + dd * 1_000L + sss;
+            return CleValide(b, cc) || CleValide(2_000_000_000L + b, cc)
+                ? null
+                : "Le numéro national est invalide : le numéro de contrôle est incorrect.";
         }
 
         public bool EstCoherentAvec(DateOnly dateNaissance, Sexe sexe)
@@ -150,12 +150,11 @@ namespace FDL.Core.Domain
 
             // Contrôle sur le mois
             bool dateNaissanceCoherente = dateNaissance.Year % 100 == YY
-                                          && dateNaissance.Month == MoisReel(MM)
-                                          && dateNaissance.Day == DD;
+                                          && (MoisReel(MM) == 0 || dateNaissance.Month == MoisReel(MM))
+                                          && (DD == 0 || dateNaissance.Day == DD);
 
-            bool cleCoherente = false;
-            if (int.TryParse($"{YY:00}{MM:00}{DD:00}{SSS:000}", out int b))
-                CleValide(dateNaissance.Year >= 2000 ? 2_000_000_000L + b : b, CC);
+            long b = YY * 10_000_000L + MM * 100_000L + DD * 1_000L + SSS;
+            bool cleCoherente = CleValide(dateNaissance.Year >= 2000 ? 2_000_000_000L + b : b, CC);
 
             return sexeCoherent && dateNaissanceCoherente && cleCoherente;
         }
