@@ -13,11 +13,11 @@
         public string Nom { get; }
         public string? Prenom { get; }
         public DateOnly DateNaissance { get; }
-        public string NumeroNational { get; }
+        public NumeroNational NumeroNational { get; }
         public Sexe Sexe { get; }
         // ------------------------------------------------------------
 
-        private PersonnePhysique(int idPersonnePhysique, string nom, string? prenom, DateOnly dateNaissance, string numeroNational, Sexe sexe)
+        private PersonnePhysique(int idPersonnePhysique, string nom, string? prenom, DateOnly dateNaissance, NumeroNational numeroNational, Sexe sexe)
         {
             if (string.IsNullOrWhiteSpace(nom))
                 throw new ArgumentException("Le nom ne peut pas être vide.", nameof(nom));
@@ -28,11 +28,14 @@
             if (dateNaissance > DateOnly.FromDateTime(DateTime.Today))
                 throw new ArgumentException("La date de naissance ne peut pas être dans le futur.", nameof(dateNaissance));
 
-            if (string.IsNullOrWhiteSpace(numeroNational))
+            if (numeroNational is null)
                 throw new ArgumentException("Le numéro national ne peut pas être vide.", nameof(numeroNational));
 
             if (!Enum.IsDefined(sexe))
                 throw new InvalidDataException($"Personne physique {idPersonnePhysique} : sexe invalide ({(int)sexe}).");
+
+            if (!numeroNational.EstCoherentAvec(dateNaissance, sexe))
+                throw new ArgumentException("Le numéro national n'est pas cohérent avec la date de naissance et le sexe.", nameof(numeroNational));
 
             IdPersonnePhysique = idPersonnePhysique;
             Nom = nom;
@@ -66,7 +69,7 @@
         public int AgeAujourdhui => Age(DateOnly.FromDateTime(DateTime.Today));
         // ------------------------------------------------------------
 
-        public static PersonnePhysique Creer(string nom, string? prenom, DateOnly dateNaissance, string numeroNational, Sexe sexe)
+        public static PersonnePhysique Creer(string nom, string? prenom, DateOnly dateNaissance, NumeroNational numeroNational, Sexe sexe)
         {
             return new(idPersonnePhysique: 0,
                         nom: nom,
@@ -76,7 +79,7 @@
                         sexe: sexe);
         }
 
-        public static PersonnePhysique Reconstituer(int idPersonnePhysique, string nom, string? prenom, DateOnly dateNaissance, string numeroNational, Sexe sexe)
+        public static PersonnePhysique Reconstituer(int idPersonnePhysique, string nom, string? prenom, DateOnly dateNaissance, NumeroNational numeroNational, Sexe sexe)
         {
             // Validation des paramètres
             if (idPersonnePhysique <= 0)
