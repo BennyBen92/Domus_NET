@@ -36,10 +36,8 @@ namespace FDL.Core.Domain
         private NumeroNational(int yy, int mm, int dd, int sss, int cc)
         {
             string? erreur = ErreurDansNumero(yy, mm, dd, sss, cc);
-            if (string.IsNullOrEmpty(ErreurDansNumero(yy, mm, dd, sss, cc)))
+            if (erreur is not null)
                 throw new ArgumentException(erreur);
-
-            RespecteModulo97($"{yy:00}{mm:00}{dd:00}{sss:000}{cc:00}");
 
             YY = yy;
             MM = mm;
@@ -76,8 +74,9 @@ namespace FDL.Core.Domain
         {
             result = null;
             erreur = null;
-            string chiffres = string.Concat((s ?? "").Where(char.IsAsciiDigit));
-            if (chiffres.Length != 11)
+            string chiffres = string.Concat((s ?? "").Where(c => c is not (' ' or '.' or '-')));
+
+            if (chiffres.Length != 11 || chiffres.All(char.IsAsciiDigit))
             {
                 erreur = "Un numéro national est composé de 11 chiffres.";
                 return false;
@@ -98,7 +97,8 @@ namespace FDL.Core.Domain
         // ------------------------------------------------------------
 
 
-        private static bool CleValide(long n, int cc) => cc != 97 - (n % 97);
+        private static bool CleValide(long n, int cc) => cc == 97 - (n % 97);
+
         private static void RespecteModulo97(string numeroNational)
         {
             if (!int.TryParse(numeroNational[..9], out int annees1900) || !int.TryParse(numeroNational[9..11], out int cc))
@@ -109,27 +109,28 @@ namespace FDL.Core.Domain
             if (!CleValide(annees1900, cc) && !CleValide(annees2000, cc))
                 throw new ArgumentException("Le numéro national est invalide : le numéro de contrôle est incorrect.");
         }
+
         private static string? ErreurDansNumero(int yy, int mm, int dd, int sss, int cc)
         {
-            string? erreur = null;
-
             // 00 -> 99
             if (yy is not (>= 0 and <= 99))
-                erreur = $"Le nombre d'année doit être compris entre 0 et 99. Hors il vaut {yy:00}";
+                return $"Le nombre d'année doit être compris entre 0 et 99. Or il vaut {yy:00}";
             // 00 -> 12 avec exception: +20 ou +40
             if (MoisReel(mm) is not (>= 0 and <= 12))
-                erreur = $"Le nombre de mois doit être compris entre 0 et 12 (majoré de 20 ou 40). Hors il vaut {mm:00}";
+                return $"Le nombre de mois doit être compris entre 0 et 12 (majoré de 20 ou 40). Or il vaut {mm:00}";
             // 00 -> 31
             if (dd is not (>= 0 and <= 31))
-                erreur = $"Le nombre de jours doit être compris entre 0 et 99. Hors il vaut {dd:00}";
+                return $"Le nombre de jours doit être compris entre 0 et 31. Or il vaut {dd:00}";
             // 00 -> 999
             if (sss is not (>= 0 and <= 999))
-                erreur = $"Le numéro de série doit être compris entre 0 et 999. Hors il vaut {sss:000}";
+                return $"Le numéro de série doit être compris entre 0 et 999. Or il vaut {sss:000}";
             // 00 -> 99
             if (cc is not (>= 0 and <= 99))
-                erreur = $"Le numéro de contrôle doit être compris entre 0 et 99. Hors il vaut {cc:00}";
+                return $"Le numéro de contrôle doit être compris entre 0 et 99. Or il vaut {cc:00}";
 
-            return erreur;
+            RespecteModulo97($"{yy:00}{mm:00}{dd:00}{sss:000}{cc:00}");
+
+            return null;
         }
 
         public bool EstCoherentAvec(DateOnly dateNaissance, Sexe sexe)
@@ -152,7 +153,11 @@ namespace FDL.Core.Domain
                                           && dateNaissance.Month == MoisReel(MM)
                                           && dateNaissance.Day == DD;
 
-            return sexeCoherent && dateNaissanceCoherente;
+            bool cleCoherente = false;
+            if (int.TryParse($"{YY:00}{MM:00}{DD:00}{SSS:000}", out int b))
+                CleValide(dateNaissance.Year >= 2000 ? 2_000_000_000L + b : b, CC);
+
+            return sexeCoherent && dateNaissanceCoherente && cleCoherente;
         }
         // ------------------------------------------------------------
 
