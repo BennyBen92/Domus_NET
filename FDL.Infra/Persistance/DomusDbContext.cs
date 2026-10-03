@@ -8,6 +8,8 @@ namespace FDL.Infra.Persistance
 
         public DbSet<RegistreRow> Registres => Set<RegistreRow>();
 
+        public DbSet<PersonnePhysiqueRow> Pesonnes => Set<PersonnePhysiqueRow>();
+
         // ApplyConfigurationsFromAssembly charge automatiquement toutes les classes de configuration du projet
         protected override void OnModelCreating(ModelBuilder modelBuilder) =>
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(DomusDbContext).Assembly);
